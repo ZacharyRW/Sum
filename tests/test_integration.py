@@ -1,6 +1,7 @@
 """Integration tests for complete workflows and module imports."""
 import sys
 import importlib
+import importlib.util
 import pytest
 from unittest.mock import patch
 
@@ -23,13 +24,21 @@ class TestModuleImports:
         except ImportError as e:
             pytest.fail(f"Failed to import demos.summing_methods: {e}")
 
-    @pytest.mark.skip(reason="Sum.py executes immediately on import (requires stdin)")
     def test_import_sum_basic(self):
         """Test importing the basic Sum module."""
-        # Note: Sum.py cannot be imported in tests because it executes
-        # code immediately at module level that requires user input.
-        # This is a design limitation of the original implementation.
-        pass
+        try:
+            spec = importlib.util.spec_from_file_location("Sum", "/home/user/Sum/Sum.py")
+            sum_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(sum_module)
+
+            # Verify the module imported successfully
+            assert sum_module is not None
+
+            # Verify the main function exists
+            assert hasattr(sum_module, 'main')
+            assert callable(sum_module.main)
+        except Exception as e:
+            pytest.fail(f"Failed to import Sum.py: {e}")
 
     def test_function_availability(self):
         """Test that all expected functions are available."""
