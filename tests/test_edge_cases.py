@@ -2,8 +2,11 @@
 import sys
 import math
 import pytest
+from pathlib import Path
 
-sys.path.insert(0, "/home/user/Sum")
+# Add repository root to path
+REPO_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 from demos.summing_methods import (
     add_plus,

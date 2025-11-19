@@ -1,8 +1,11 @@
 """Tests for custom sum implementations in various modules."""
 import sys
 import pytest
+from pathlib import Path
 
-sys.path.insert(0, "/home/user/Sum")
+# Add repository root to path
+REPO_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 
 def custom_sum_v1(nums):

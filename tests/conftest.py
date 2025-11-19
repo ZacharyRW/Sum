@@ -1,9 +1,12 @@
 """Shared pytest fixtures and configuration for Sum repository tests."""
 import sys
 import pytest
+from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, "/home/user/Sum")
+# Add parent directory (repository root) to path for imports
+# This works from any location where tests are run
+REPO_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 
 # ==================== Number Fixtures ====================

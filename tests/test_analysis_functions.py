@@ -1,8 +1,12 @@
 """Tests for number analysis and breakdown functions."""
 import sys
 import pytest
+from pathlib import Path
 
-sys.path.insert(0, "/home/user/Sum")
+# Add repository root to path - conftest.py does this too, but this ensures
+# the test can run standalone if needed
+REPO_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 
 def analyze_numbers(numbers):

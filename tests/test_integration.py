@@ -3,9 +3,12 @@ import sys
 import importlib
 import importlib.util
 import pytest
+from pathlib import Path
 from unittest.mock import patch
 
-sys.path.insert(0, "/home/user/Sum")
+# Add repository root to path - works from any location
+REPO_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 
 class TestModuleImports:
@@ -27,7 +30,11 @@ class TestModuleImports:
     def test_import_sum_basic(self):
         """Test importing the basic Sum module."""
         try:
-            spec = importlib.util.spec_from_file_location("Sum", "/home/user/Sum/Sum.py")
+            # Use relative path from repository root
+            sum_py_path = REPO_ROOT / "Sum.py"
+            assert sum_py_path.exists(), f"Sum.py not found at {sum_py_path}"
+
+            spec = importlib.util.spec_from_file_location("Sum", str(sum_py_path))
             sum_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(sum_module)
 
