@@ -88,7 +88,7 @@ This is an educational Python repository demonstrating various approaches to sum
    - Canonical implementations of all summation approaches
    - Type-annotated functions for reuse across files
 
-8. **tests/** (7 test files, ~1,781 lines, 179 test cases)
+8. **tests/** (7 test files, ~1,495 lines, 179 test cases)
    - Full pytest suite covering all implementations
    - Fixtures in `conftest.py` for shared test data
    - Separate modules per concern (edge cases, validation, integration)
