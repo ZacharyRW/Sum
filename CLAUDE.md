@@ -22,50 +22,76 @@ This is an educational Python repository demonstrating various approaches to sum
 ├── SumImprovedbyClaudeCodev3.py     # v3: Full menu system (most advanced)
 ├── SumImprovedbyChatGPT.py          # Alternative approach with demos module
 ├── SumImprovedbyChatGPTv2.py        # Test-driven variant (references demos.summing_methods)
+├── demos/
+│   ├── __init__.py
+│   └── summing_methods.py           # Shared module used by ChatGPT variants
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py                  # Pytest fixtures and shared test setup
+│   ├── test_analysis_functions.py   # Tests for positive/negative breakdown
+│   ├── test_custom_implementations.py # Tests for manual loop implementations
+│   ├── test_edge_cases.py           # Edge cases: empty, large, precision
+│   ├── test_input_validation.py     # Tests for get_number() and input handling
+│   ├── test_integration.py          # End-to-end integration tests
+│   ├── test_original_summing_methods.py # Tests covering Sum.py methods
+│   └── test_summation_methods.py    # Tests for all summation approaches
+├── TEST_COVERAGE_REPORT.md          # Full test coverage report (179 test cases)
+├── CLAUDE.md                        # This file
 ├── README.md                        # Repository description
 └── LICENSE                          # Apache 2.0 License
 ```
 
 ### File Evolution Timeline
 
-1. **Sum.py** (lines: 12)
+1. **Sum.py** (lines: 17)
    - Basic summation with two methods
    - Direct user input without validation
    - Minimal error handling
-   - Location: /home/user/Sum/Sum.py:1-12
+   - Refactored to be testable (functions importable without side effects)
+   - Location: /home/user/Sum/Sum.py:1-17
 
-2. **SumImprovedbyClaudeCode.py** (lines: 37)
+2. **SumImprovedbyClaudeCode.py** (lines: 36)
    - Introduced `get_number()` helper function
    - Input validation with try/except
    - Three demonstration methods
-   - Location: /home/user/Sum/SumImprovedbyClaudeCode.py:1-37
+   - Location: /home/user/Sum/SumImprovedbyClaudeCode.py:1-36
 
-3. **SumImprovedbyClaudeCodev2.py** (lines: 70)
+3. **SumImprovedbyClaudeCodev2.py** (lines: 69)
    - Added float support via `allow_float` parameter
    - Multiple number summation capability
    - Custom sum implementation demonstration
-   - Location: /home/user/Sum/SumImprovedbyClaudeCodev2.py:1-70
+   - Location: /home/user/Sum/SumImprovedbyClaudeCodev2.py:1-69
 
-4. **SumImprovedbyClaudeCodev3.py** (lines: 162) - **Most Complete**
+4. **SumImprovedbyClaudeCodev3.py** (lines: 161) - **Most Complete**
    - Interactive menu system
    - Negative number support
    - Positive/negative breakdown analysis
    - "Run all examples" feature
    - Production-ready structure
-   - Location: /home/user/Sum/SumImprovedbyClaudeCodev3.py:1-162
+   - Location: /home/user/Sum/SumImprovedbyClaudeCodev3.py:1-161
 
-5. **SumImprovedbyChatGPT.py** (lines: 89)
+5. **SumImprovedbyChatGPT.py** (lines: 88)
    - Module-based architecture (`demos.summing_methods`)
    - Type hints and annotations
    - Professional documentation style
    - Multiple algorithm variants (reduce, fsum, operator)
-   - Location: /home/user/Sum/SumImprovedbyChatGPT.py:1-89
+   - Location: /home/user/Sum/SumImprovedbyChatGPT.py:1-88
 
-6. **SumImprovedbyChatGPTv2.py** (lines: 107)
+6. **SumImprovedbyChatGPTv2.py** (lines: 106)
    - Comprehensive test suite using pytest
    - Edge case testing (empty lists, large ranges, precision)
    - References external module structure
-   - Location: /home/user/Sum/SumImprovedbyChatGPTv2.py:1-107
+   - Location: /home/user/Sum/SumImprovedbyChatGPTv2.py:1-106
+
+7. **demos/summing_methods.py** (lines: 88)
+   - Shared library module imported by ChatGPT variants
+   - Canonical implementations of all summation approaches
+   - Type-annotated functions for reuse across files
+
+8. **tests/** (7 test files, ~1,781 lines, 179 test cases)
+   - Full pytest suite covering all implementations
+   - Fixtures in `conftest.py` for shared test data
+   - Separate modules per concern (edge cases, validation, integration)
 
 ## Key Code Patterns
 
@@ -143,9 +169,22 @@ This repository follows a progressive enhancement model:
 - Add unnecessary complexity without clear benefit
 - Use emojis or decorative elements (unless explicitly requested)
 
-## Testing Considerations
+## Testing
 
-Based on SumImprovedbyChatGPTv2.py test patterns:
+The repository has a comprehensive pytest suite in `tests/` with 179 test cases.
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest tests/
+
+# Run with coverage
+pytest tests/ --cov=. --cov-report=term-missing
+
+# Run a specific module
+pytest tests/test_edge_cases.py -v
+```
 
 ### Test Coverage Areas
 1. **Basic correctness**: All methods agree on simple inputs
@@ -154,6 +193,22 @@ Based on SumImprovedbyChatGPTv2.py test patterns:
 4. **Precision**: Float precision issues (especially with `fsum`)
 5. **Performance**: Large input ranges (e.g., 200,000 elements)
 6. **Type safety**: Mixed int/float inputs
+7. **Analysis functions**: Positive/negative breakdowns, statistics
+8. **Input validation**: `get_number()` retry loops, error messages
+9. **Integration**: Cross-method consistency checks
+
+### Test File Responsibilities
+
+| File | Focus |
+|---|---|
+| `conftest.py` | Shared fixtures and test data |
+| `test_summation_methods.py` | Core summation approaches |
+| `test_original_summing_methods.py` | Sum.py baseline methods |
+| `test_custom_implementations.py` | Manual loop implementations |
+| `test_edge_cases.py` | Boundary and precision cases |
+| `test_input_validation.py` | `get_number()` and user input |
+| `test_analysis_functions.py` | Breakdown and analysis features |
+| `test_integration.py` | End-to-end cross-method tests |
 
 ### Test Data Patterns
 ```python
@@ -165,6 +220,8 @@ Based on SumImprovedbyChatGPTv2.py test patterns:
     (3.5, 4.25),         # Floats
 ])
 ```
+
+See `TEST_COVERAGE_REPORT.md` for the full coverage report.
 
 ## AI Assistant Guidelines
 
@@ -212,8 +269,8 @@ Based on SumImprovedbyChatGPTv2.py test patterns:
 ### Branch Strategy
 
 Development branches follow pattern:
-- `claude/claude-md-<session-id>-<unique-id>`
-- Example: `claude/claude-md-mi69wcg66rlsg3ka-01CHV3QsQosuytMEvA2kPAry`
+- `claude/<description>-<session-id>`
+- Example: `claude/update-docs-sx0yD`
 
 ### Commit Message Pattern
 
@@ -233,7 +290,7 @@ Always push to the designated branch:
 ```bash
 git add <files>
 git commit -m "Descriptive message"
-git push -u origin claude/claude-md-<session-id>-<unique-id>
+git push -u origin claude/<description>-<session-id>
 ```
 
 Retry on network failures with exponential backoff (2s, 4s, 8s, 16s).
@@ -267,8 +324,9 @@ This repository serves as:
 **Features**: Type hints, multiple algorithms, functional programming, professional structure
 
 ### Testing Reference
-**File**: SumImprovedbyChatGPTv2.py
-**Features**: Pytest suite, parametrized tests, edge cases, precision testing
+**Directory**: tests/
+**Features**: 179 test cases across 7 files, full pytest suite, parametrized tests, fixtures, edge cases, precision testing
+**Report**: TEST_COVERAGE_REPORT.md
 
 ### Original Version
 **File**: Sum.py
@@ -291,6 +349,6 @@ When asked to extend this repository, consider:
 
 ---
 
-**Last Updated**: 2025-11-19
+**Last Updated**: 2026-02-21
 **Repository**: /home/user/Sum
-**Primary Branch**: claude/claude-md-mi69wcg66rlsg3ka-01CHV3QsQosuytMEvA2kPAry
+**Primary Branch**: master
