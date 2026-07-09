@@ -15,7 +15,7 @@ This is an educational Python repository demonstrating various approaches to sum
 ### File Organization
 
 ```
-/home/user/Sum/
+./
 ├── Sum.py                           # Original basic implementation
 ├── SumImprovedbyClaudeCode.py       # v1: Added error handling
 ├── SumImprovedbyClaudeCodev2.py     # v2: Float support + multiple numbers
@@ -48,19 +48,19 @@ This is an educational Python repository demonstrating various approaches to sum
    - Direct user input without validation
    - Minimal error handling
    - Refactored to be testable (functions importable without side effects)
-   - Location: /home/user/Sum/Sum.py:1-17
+   - Location: `Sum.py:1`
 
 2. **SumImprovedbyClaudeCode.py** (lines: 36)
    - Introduced `get_number()` helper function
    - Input validation with try/except
    - Three demonstration methods
-   - Location: /home/user/Sum/SumImprovedbyClaudeCode.py:1-36
+   - Location: `SumImprovedbyClaudeCode.py:1`
 
 3. **SumImprovedbyClaudeCodev2.py** (lines: 69)
    - Added float support via `allow_float` parameter
    - Multiple number summation capability
    - Custom sum implementation demonstration
-   - Location: /home/user/Sum/SumImprovedbyClaudeCodev2.py:1-69
+   - Location: `SumImprovedbyClaudeCodev2.py:1`
 
 4. **SumImprovedbyClaudeCodev3.py** (lines: 161) - **Most Complete**
    - Interactive menu system
@@ -68,20 +68,20 @@ This is an educational Python repository demonstrating various approaches to sum
    - Positive/negative breakdown analysis
    - "Run all examples" feature
    - Production-ready structure
-   - Location: /home/user/Sum/SumImprovedbyClaudeCodev3.py:1-161
+   - Location: `SumImprovedbyClaudeCodev3.py:1`
 
 5. **SumImprovedbyChatGPT.py** (lines: 88)
    - Module-based architecture (`demos.summing_methods`)
    - Type hints and annotations
    - Professional documentation style
    - Multiple algorithm variants (reduce, fsum, operator)
-   - Location: /home/user/Sum/SumImprovedbyChatGPT.py:1-88
+   - Location: `SumImprovedbyChatGPT.py:1`
 
 6. **SumImprovedbyChatGPTv2.py** (lines: 106)
    - Comprehensive test suite using pytest
    - Edge case testing (empty lists, large ranges, precision)
    - References external module structure
-   - Location: /home/user/Sum/SumImprovedbyChatGPTv2.py:1-106
+   - Location: `SumImprovedbyChatGPTv2.py:1`
 
 7. **demos/summing_methods.py** (lines: 88)
    - Shared library module imported by ChatGPT variants
@@ -286,11 +286,13 @@ Historical commits show:
 
 ### Push Guidelines
 
-Always push to the designated branch:
+Push only when the user explicitly requests it, and confirm the branch at runtime before doing so:
 ```bash
+git branch --show-current
+git status --short
 git add <files>
 git commit -m "Descriptive message"
-git push -u origin claude/<description>-<session-id>
+git push
 ```
 
 Retry on network failures with exponential backoff (2s, 4s, 8s, 16s).
@@ -350,5 +352,5 @@ When asked to extend this repository, consider:
 ---
 
 **Last Updated**: 2026-02-21
-**Repository**: /home/user/Sum
-**Primary Branch**: master
+**Repository**: repository root (`.`)
+**Last verified**: 2026-07-09 against commit `ae2b01d`. Re-run `git branch --show-current`, `git rev-parse --short HEAD`, and `git status --short` before making branch, release, or working-tree claims.
