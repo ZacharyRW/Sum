@@ -118,31 +118,34 @@ broken builds/failing tests (suite is green).
 
 ## Milestone Table
 
-| ID | Initiative | Priority | Effort | Dependencies | Target Phase | Success Criteria |
-|---|---|---|---|---|---|---|
-| DOC-001 | Reconcile license (GPL v3 vs docs) | Critical | XS (after decision) | Owner decision | 0 | `LICENSE`, README, CLAUDE.md agree; GitHub badge matches README |
-| BUG-001 | Fix `show_two_number_demo` crash | Critical | XS | — | 0 | Single-number input retries instead of crashing; regression test passes |
-| BUG-002 | Fix `sys.path.append(".")` | High | XS | — | 1 | File imports demos from any cwd |
-| ARCH-001 | Resolve duplicate ChatGPT file(s) | High | S | Owner choice (rewrite vs delete) | 1 | No byte-identical files; docs describe reality |
-| TEST-001 | Remove duplicate test module | High | XS | ARCH-001 decision | 1 | Each test exists once; suite still ≥ ~163 unique cases, green |
-| TEST-002 | Test `get_number` (3 variants) | High | S | — | 1 | Coverage >0% on all three Claude variants |
-| DX-001 | requirements-dev.txt + pyproject.toml | High | XS | — | 1 | Fresh clone: `pip install -r requirements-dev.txt && pytest` works |
-| DOC-005 | Docstring + `# file:` header fixes | Medium | XS | — | 1 | ruff/grep confirm headers match filenames |
-| GH-001 | CI workflow (pytest + ruff, 3.9–3.13) | High | S | DX-001 | 2 | Green check on PRs; badge in README |
-| DX-002 | Fix 10 ruff findings + config | Medium | XS | — | 2 | `ruff check .` exits 0 |
-| TEST-003 | Test source, not local copies | Medium | M | — | 2 | `test_analysis_functions`/`test_custom_implementations` import from source files |
-| TEST-004 | Prune dead conftest fixtures | Medium | S | TEST-003 (may reuse some) | 2 | No unused fixtures/markers; suite green |
-| TEST-005 | Document/test uncapped `count` | Low | XS | — | 2 | Docstring note + test exist |
-| GH-004 | Dependabot for actions | Low | XS | GH-001 | 2 | Config present, first PR auto-opened on action update |
-| ARCH-002 | Primary-mission decision + README lead | Medium | S | Owner decision | 3 | README first paragraph states one primary mission |
-| DOC-002 | CLAUDE.md refresh | Medium | S | ARCH-001, TEST-001 | 3 | No stale claims; naming template correct |
-| DOC-003 | Coverage report refresh/archive | Low | XS | TEST-001..004 | 3 | Report matches `pytest` output or is archived |
-| DOC-004 | Supersede banners on old audits | Low | XS | — | 3 | Both files point to ANALYSIS.md |
-| FEAT-003 | Stats in v3 analysis | Low | S | TEST-003 | 3 | New stats covered by tests |
-| GH-002 | Topics, disable wiki/projects | Low | XS | Manual settings access | 3 | Topics visible on repo page |
-| FEAT-001 | v4: CLI args + file input | Medium | M | ARCH-002 | 4 | New variant + tests + docs entry |
-| FEAT-002 | Tutorial notebook | Medium | M | ARCH-002 | 4 | `tutorial.ipynb` renders on GitHub, walks v1→v3 |
-| GH-003 | Branch protection + v1.0 tag | Low | XS | GH-001 | 4 | PRs require CI; release exists |
+All items are tracked as GitHub issues (filed 2026-07-12).
+
+| ID | Issue | Initiative | Priority | Effort | Dependencies | Target Phase | Success Criteria |
+|---|---|---|---|---|---|---|---|
+| DOC-001 | [#7](https://github.com/ZacharyRW/Sum/issues/7) | Reconcile license (GPL v3 vs docs) | Critical | XS (after decision) | Owner decision | 0 | `LICENSE`, README, CLAUDE.md agree; GitHub badge matches README |
+| BUG-001 | [#8](https://github.com/ZacharyRW/Sum/issues/8) | Fix `show_two_number_demo` crash | Critical | XS | — | 0 | Single-number input retries instead of crashing; regression test passes |
+| BUG-002 | [#9](https://github.com/ZacharyRW/Sum/issues/9) | Fix `sys.path.append(".")` | High | XS | — | 1 | File imports demos from any cwd |
+| ARCH-001 | [#10](https://github.com/ZacharyRW/Sum/issues/10) | Resolve duplicate ChatGPT file(s) | High | S | Owner choice (rewrite vs delete) | 1 | No byte-identical files; docs describe reality |
+| TEST-001 | [#11](https://github.com/ZacharyRW/Sum/issues/11) | Remove duplicate test module | High | XS | ARCH-001 decision | 1 | Each test exists once; suite still ≥ ~163 unique cases, green |
+| TEST-002 | [#12](https://github.com/ZacharyRW/Sum/issues/12) | Test `get_number` (3 variants) | High | S | — | 1 | Coverage >0% on all three Claude variants |
+| DX-001 | [#13](https://github.com/ZacharyRW/Sum/issues/13) | requirements-dev.txt + pyproject.toml | High | XS | — | 1 | Fresh clone: `pip install -r requirements-dev.txt && pytest` works |
+| DOC-005 | [#14](https://github.com/ZacharyRW/Sum/issues/14) | Docstring + `# file:` header fixes | Medium | XS | — | 1 | ruff/grep confirm headers match filenames |
+| BUG-003 | [#30](https://github.com/ZacharyRW/Sum/issues/30) | Remove redundant `int()` casts (CR-12) | Low | XS | — | 1 | No redundant casts; folds into the DX-002 hygiene PR |
+| GH-001 | [#15](https://github.com/ZacharyRW/Sum/issues/15) | CI workflow (pytest + ruff, 3.9–3.13) | High | S | DX-001 | 2 | Green check on PRs; badge in README |
+| DX-002 | [#16](https://github.com/ZacharyRW/Sum/issues/16) | Fix 10 ruff findings + config | Medium | XS | — | 2 | `ruff check .` exits 0 |
+| TEST-003 | [#17](https://github.com/ZacharyRW/Sum/issues/17) | Test source, not local copies | Medium | M | — | 2 | `test_analysis_functions`/`test_custom_implementations` import from source files |
+| TEST-004 | [#18](https://github.com/ZacharyRW/Sum/issues/18) | Prune dead conftest fixtures | Medium | S | TEST-003 (may reuse some) | 2 | No unused fixtures/markers; suite green |
+| TEST-005 | [#19](https://github.com/ZacharyRW/Sum/issues/19) | Document/test uncapped `count` | Low | XS | — | 2 | Docstring note + test exist |
+| GH-004 | [#20](https://github.com/ZacharyRW/Sum/issues/20) | Dependabot for actions | Low | XS | GH-001 | 2 | Config present, first PR auto-opened on action update |
+| ARCH-002 | [#21](https://github.com/ZacharyRW/Sum/issues/21) | Primary-mission decision + README lead | Medium | S | Owner decision | 3 | README first paragraph states one primary mission |
+| DOC-002 | [#22](https://github.com/ZacharyRW/Sum/issues/22) | CLAUDE.md refresh | Medium | S | ARCH-001, TEST-001 | 3 | No stale claims; naming template correct |
+| DOC-003 | [#23](https://github.com/ZacharyRW/Sum/issues/23) | Coverage report refresh/archive | Low | XS | TEST-001..004 | 3 | Report matches `pytest` output or is archived |
+| DOC-004 | [#24](https://github.com/ZacharyRW/Sum/issues/24) | Supersede banners on old audits | Low | XS | — | 3 | Both files point to ANALYSIS.md |
+| FEAT-003 | [#25](https://github.com/ZacharyRW/Sum/issues/25) | Stats in v3 analysis | Low | S | TEST-003 | 3 | New stats covered by tests |
+| GH-002 | [#26](https://github.com/ZacharyRW/Sum/issues/26) | Topics, disable wiki/projects | Low | XS | Manual settings access | 3 | Topics visible on repo page |
+| FEAT-001 | [#27](https://github.com/ZacharyRW/Sum/issues/27) | v4: CLI args + file input | Medium | M | ARCH-002 | 4 | New variant + tests + docs entry |
+| FEAT-002 | [#28](https://github.com/ZacharyRW/Sum/issues/28) | Tutorial notebook | Medium | M | ARCH-002 | 4 | `tutorial.ipynb` renders on GitHub, walks v1→v3 |
+| GH-003 | [#29](https://github.com/ZacharyRW/Sum/issues/29) | Branch protection + v1.0 tag | Low | XS | GH-001 | 4 | PRs require CI; release exists |
 
 Effort scale: XS ≤ 30 min · S ≤ 2 h · M ≤ 1 day.
 
@@ -165,7 +168,7 @@ Effort scale: XS ≤ 30 min · S ≤ 2 h · M ≤ 1 day.
 4. **GH-001** — CI workflow (so every later step lands under test).
 5. **ARCH-001** — rewrite-or-remove `SumImprovedbyChatGPT.py`; decide `…ChatGPTv2.py`.
 6. **TEST-001** — drop the duplicate test module.
-7. **BUG-002, DOC-005, DX-002** — one small "hygiene" PR.
+7. **BUG-002, BUG-003, DOC-005, DX-002** — one small "hygiene" PR.
 8. **TEST-002** — `get_number` tests.
 9. **TEST-003 → TEST-004 → TEST-005** — source-truth tests, conftest prune, count note.
 10. **ARCH-002 → DOC-002 → DOC-003 → DOC-004** — mission + documentation refresh.
