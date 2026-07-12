@@ -42,7 +42,7 @@ def demonstrate_sum_methods():
         print("Please enter at least 1 number.\n")
         return
     
-    numbers = get_multiple_numbers(int(count))
+    numbers = get_multiple_numbers(count)
     result3 = sum(numbers)
     
     # Format output nicely

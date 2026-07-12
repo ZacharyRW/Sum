@@ -47,7 +47,7 @@ def method_multiple_numbers():
         print("Please enter at least 1 number.")
         return
     
-    numbers = get_multiple_numbers(int(count))
+    numbers = get_multiple_numbers(count)
     result = sum(numbers)
     
     numbers_str = ' + '.join(str(n) for n in numbers)
@@ -62,7 +62,7 @@ def method_custom_sum():
         print("Please enter at least 1 number.")
         return
     
-    numbers = get_multiple_numbers(int(count))
+    numbers = get_multiple_numbers(count)
     
     def custom_sum(nums):
         """Custom implementation of sum without using built-in."""
@@ -85,7 +85,7 @@ def method_positive_negative_demo():
         print("Please enter at least 1 number.")
         return
     
-    numbers = get_multiple_numbers(int(count))
+    numbers = get_multiple_numbers(count)
     result = sum(numbers)
     
     positive_nums = [n for n in numbers if n > 0]
