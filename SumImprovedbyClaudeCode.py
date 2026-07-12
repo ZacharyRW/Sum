@@ -1,5 +1,5 @@
 def get_number(prompt):
-    """Get a valid number from user with error handling."""
+    """Get a valid integer from user with error handling and retry on invalid input."""
     while True:
         try:
             return int(input(prompt))

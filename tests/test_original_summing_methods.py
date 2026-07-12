@@ -1,4 +1,4 @@
-# file: tests/test_summing_methods.py
+# file: tests/test_original_summing_methods.py
 import math
 import sys
 import types

@@ -1,4 +1,4 @@
-# file: demos/summing_methods.py
+# file: SumImprovedbyChatGPT.py
 from __future__ import annotations
 
 import math
