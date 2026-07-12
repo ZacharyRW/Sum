@@ -1,4 +1,4 @@
-# file: tests/test_summing_methods.py
+# file: SumImprovedbyChatGPTv2.py
 import math
 import sys
 import types
