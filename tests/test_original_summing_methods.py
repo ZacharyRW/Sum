@@ -1,7 +1,6 @@
 # file: tests/test_summing_methods.py
 import math
 import sys
-import types
 import pytest
 
 # Ensure the demo module is importable if tests run from repo root.

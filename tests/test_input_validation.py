@@ -1,7 +1,6 @@
 """Tests for input validation functions."""
 import sys
 from unittest.mock import patch
-import pytest
 from pathlib import Path
 
 # Add repository root to path

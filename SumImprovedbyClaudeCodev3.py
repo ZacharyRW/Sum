@@ -94,7 +94,7 @@ def method_positive_negative_demo():
     
     numbers_str = ' + '.join(str(n) for n in numbers)
     print(f"\nSum: {numbers_str} = {result}")
-    print(f"\nBreakdown:")
+    print("\nBreakdown:")
     print(f"  Positive numbers: {positive_nums} (sum: {sum(positive_nums) if positive_nums else 0})")
     print(f"  Negative numbers: {negative_nums} (sum: {sum(negative_nums) if negative_nums else 0})")
     if zero_nums:

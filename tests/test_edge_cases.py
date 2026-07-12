@@ -10,9 +10,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from demos.summing_methods import (
     add_plus,
-    add_sum,
     sum_builtin,
-    sum_reduce,
     sum_fsum,
 )
 
