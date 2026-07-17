@@ -43,8 +43,8 @@ The recommended direction is to preserve the educational history while choosing 
 | `SumImprovedbyChatGPTv2.py` | Root-level pytest-style test module. | Misleadingly named as an implementation; uses a fragile `sys.path.append(".")`. |
 | `demos/summing_methods.py` | Reusable summation functions and demo entry points. | Best candidate for a canonical core, but has input-contract and precision defects. |
 | `tests/` | pytest suite and fixtures. | Broad in count but does not directly test several source variants; contains duplicate and local-reimplementation tests. |
-| `README.md`, `CLAUDE.md` | Public/project guidance. | Useful intent, but key claims are inaccurate or stale. |
-| `CODE_REVIEW.md`, `AUDIT.md`, `TEST_COVERAGE_REPORT.md` | Historical reviews and test report. | Valuable evidence, but not current status documents. |
+| `README.md`, `AGENTS.md`, `CLAUDE.md` | Public/project and agent guidance. | `AGENTS.md` is canonical; `CLAUDE.md` is a Claude-specific pointer. Public claims still require license/test-scope reconciliation. |
+| Removed 2026-07-17: `CODE_REVIEW.md`, `AUDIT.md`, `TEST_COVERAGE_REPORT.md` | Historical reviews and test report. | Reviewed against this analysis and roadmap before removal; their verified findings and limitations are captured below. |
 | `LICENSE` | Legal source of truth. | GPL-3.0 text; contradicts README and CLAUDE claims of Apache-2.0. |
 | Missing: `pyproject.toml`, requirements file, `.github/`, CI, Dependabot config | Tooling/repository infrastructure. | Primary reproducibility and maintenance gap. |
 
@@ -101,16 +101,18 @@ Status terms: **Confirmed**, **Partially confirmed**, **Already fixed**, **Obsol
 | CR-16: uncapped count | #16 | Confirmed | v2/v3 pass user-controlled count to `range(count)`. | Yes | Define and test a product limit or document intentional behavior. |
 | CR-17: v2/v3 pattern presented as universal | #17 | Confirmed | `CLAUDE.md`'s `allow_float` example does not describe v1. | Yes | Label the version-specific pattern. |
 
-### Historical audit and coverage-report claims
+### Retired audit, review, and coverage-report claims
+
+`AUDIT.md`, `CODE_REVIEW.md`, and `TEST_COVERAGE_REPORT.md` were reviewed and deliberately removed on 2026-07-17 after their material findings were reconciled into this document and `ROADMAP.md`. The references below preserve their provenance and assessment without retaining stale reports as live repository guidance.
 
 | Existing item | Source | Current status | Verification | Still relevant? | Recommended action |
 | --- | --- | --- | --- | --- | --- |
-| “All 17 review issues remain unaddressed” | `AUDIT.md` (2026-06-16) | Partially confirmed | Most defects remain, but CR-8 is fixed and later GitHub planning exists. | As historical evidence only | Mark as superseded by a dated current audit; retain it for provenance. |
+| “All 17 review issues remain unaddressed” | `AUDIT.md` (2026-06-16) | Partially confirmed | Most defects remain, but CR-8 is fixed and later GitHub planning exists. | As historical evidence only | Retain its reconciled assessment here; use the current analysis and roadmap. |
 | License contradiction | `AUDIT.md` | Confirmed | GPL-3.0 `LICENSE` conflicts with Apache claims in README and CLAUDE. | Yes | Resolve before further public release work. |
 | No CI / dependency declaration | `AUDIT.md` | Confirmed | No workflow, manifest, or requirements file found. | Yes | Add minimal dev metadata and CI after stabilization. |
 | Thirty unused fixtures / unused markers | `AUDIT.md` | Confirmed | AST/static review found 30 defined fixtures unused by test parameters; custom markers are not applied. | Yes | Remove or use them deliberately. |
-| Historical 178-pass/1-skip result | `TEST_COVERAGE_REPORT.md` (2025-11-19) | Obsolete | Later remote planning records 179/179; no local rerun was possible. | No as a live result | Archive or replace with CI-generated results. |
-| “`Sum.py` cannot be unit tested because import reads stdin” | `TEST_COVERAGE_REPORT.md` | Obsolete | `Sum.py` has an `if __name__ == "__main__"` guard. | No | Remove from a refreshed report. |
+| Historical 178-pass/1-skip result | `TEST_COVERAGE_REPORT.md` (2025-11-19) | Obsolete | Later remote planning records 179/179; no local rerun was possible. | No as a live result | Do not recreate it; replace it only with CI-generated results. |
+| “`Sum.py` cannot be unit tested because import reads stdin” | `TEST_COVERAGE_REPORT.md` | Obsolete | `Sum.py` has an `if __name__ == "__main__"` guard. | No | Record the correction here; do not recreate the report. |
 | “All implementations / public APIs are covered” | README, CLAUDE, coverage report | Confirmed inaccurate | Tests do not directly cover the Claude variants or their nested logic. | Yes | Narrow claims until direct tests exist. |
 
 No active `TODO`, `FIXME`, `HACK`, `XXX`, `skip`, `xfail`, or placeholder implementation marker was found in current Python/Markdown source. The meaningful backlog is in the historical reports and GitHub issues, not inline comments.
@@ -236,10 +238,11 @@ No confirmed performance bottleneck exists for the present educational CLI. The 
 | Document or need | Status | Problems | Recommended action |
 | --- | --- | --- | --- |
 | `README.md` | Update | License is wrong; “all implementations” test claim is false; lacks install, run, status, limitations, and canonical-variant explanation. | Update after ARCH-002 and DOC-001; include concise runnable examples. |
-| `CLAUDE.md` | Update | Wrong license, stale file roles/counts, universalized v2/v3 input pattern, naming typo, stale claims of production readiness. | Refresh as an assistant/contributor guide; avoid volatile line-count claims. |
-| `CODE_REVIEW.md` | Archive/retain | Good historical evidence, but reports old state and priority labels. | Add a dated “historical/superseded by ANALYSIS.md” banner; do not delete. |
-| `AUDIT.md` | Archive/retain | Useful June snapshot, but says all findings remain and lacks reconciliation with later work. | Add a historical/superseded banner. |
-| `TEST_COVERAGE_REPORT.md` | Replace/retain history | Old branch, obsolete import claim, stale count/result, unsupported coverage claims. | Preserve as historical or move to `docs/history/`; replace with CI-generated results only. |
+| `AGENTS.md` | Keep current | Canonical repository guidance created 2026-07-17; it avoids stale test/coverage claims and identifies current caution points. | Refresh it with README only after the canonical variant and test baseline are decided. |
+| `CLAUDE.md` | Keep minimal | Claude-specific pointer to `AGENTS.md`; no repository-wide guidance is duplicated. | Add only genuine Claude-specific conventions. |
+| `CODE_REVIEW.md` | Removed after reconciliation | Good historical evidence, but reported old state and priority labels. | Its verified inventory is retained above; use this analysis and roadmap going forward. |
+| `AUDIT.md` | Removed after reconciliation | Useful June snapshot, but said all findings remained and lacked reconciliation with later work. | Its verified findings are retained above; use this analysis and roadmap going forward. |
+| `TEST_COVERAGE_REPORT.md` | Removed after reconciliation | Old branch, obsolete import claim, stale count/result, unsupported coverage claims. | Do not recreate a static report; publish CI-generated evidence only after the toolchain exists. |
 | `LICENSE` | Keep as current legal source | Contradicts public documentation. | Decide whether GPL-3.0 is intentional before changing anything else. |
 | `ANALYSIS.md` | Create/keep | This audit must be reconciled with current `main`. | Treat as current audit snapshot; refresh after main reconciliation. |
 | `ROADMAP.md` | Create/keep | Must contain only verified defects and explicitly separated ideas. | Use as the canonical execution plan after maintainer acceptance. |

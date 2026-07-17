@@ -76,9 +76,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 - **GH-001 — Add minimal GitHub Actions CI.** Run syntax/tooling, pytest, Ruff, and any chosen type check on supported Python versions. Keep the workflow simple and deterministic.
 - **GH-004 — Add Dependabot after dependencies and CI exist.** Configure only ecosystems actually declared.
-- **DOC-002 — Refresh `CLAUDE.md`.** Make it a concise, accurate guide to the canonical variant, historical variants, commands, branch policy, and repository-relative paths.
-- **DOC-003 — Retire the stale coverage report as a live claim.** Replace it with CI-generated evidence or move it to historical documentation.
-- **DOC-004 — Mark old reviews as historical.** Add a short superseded banner to `AUDIT.md` and `CODE_REVIEW.md`; retain provenance rather than deleting them.
+- **DOC-002 — Refresh agent guidance and public documentation.** `AGENTS.md` is now the canonical repository guide and `CLAUDE.md` is a Claude-specific pointer. Refresh README and agent guidance after the canonical variant and test baseline are decided.
 - Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` after the command baseline is known.
 
 **Exit criteria:** A new contributor can install one declared toolchain, run the same checks locally and in CI, understand which implementation is canonical, and distinguish historical documents from current guidance.
@@ -127,13 +125,12 @@ For each exploratory item, define target reader, expected learning value, mainte
 
 ## Documentation Plan
 
-1. **DOC-001:** Record the intended license and make `LICENSE`, README, and CLAUDE agree.
+1. **DOC-001:** Record the intended license and make `LICENSE`, README, and `AGENTS.md` agree.
 2. **DOC-005:** Correct concrete code headers/docstrings while behavior tests are added.
-3. **DOC-002:** Refresh README/CLAUDE around the selected canonical implementation and accurate test scope.
-4. **DOC-003:** Move or label `TEST_COVERAGE_REPORT.md` as historical; publish only CI-backed results thereafter.
-5. **DOC-004:** Add provenance-preserving historical banners to `AUDIT.md` and `CODE_REVIEW.md`.
-6. Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` from the actual declared toolchain and CI commands.
-7. Add `docs/architecture.md` only after ARCH-001/ARCH-002 are accepted; do not document a speculative structure as current fact.
+3. **DOC-002:** Refresh README and `AGENTS.md` around the selected canonical implementation and accurate test scope; keep `CLAUDE.md` Claude-specific.
+4. **DOC-003 / DOC-004 (complete 2026-07-17):** Review findings from the historical audit, code review, and coverage report; reconcile material items into `ANALYSIS.md` and this roadmap; then remove the stale reports. Publish only CI-backed test evidence thereafter.
+5. Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` from the actual declared toolchain and CI commands.
+6. Add `docs/architecture.md` only after ARCH-001/ARCH-002 are accepted; do not document a speculative structure as current fact.
 
 ## GitHub Improvement Plan
 
@@ -198,9 +195,9 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | DX-002 | Establish Ruff baseline | P2 | S | DX-001 | 2 | Ruff output is zero or has explicitly accepted, documented exceptions. |
 | GH-001 | Add CI | P1 | M | DX-001, direct tests | 2 | GitHub Actions runs documented checks reliably. |
 | GH-004 | Add Dependabot | P3 | S | DX-001, GH-001 | 2 | Automated dependency PRs cover actual declared ecosystems. |
-| DOC-002 | Refresh README/CLAUDE | P1 | M | DOC-001, ARCH-001, test baseline | 2 | Public docs match code, license, commands, and coverage scope. |
-| DOC-003 | Retire stale coverage report | P2 | S | GH-001 | 2 | Historical report is labeled/moved; current evidence is CI-generated. |
-| DOC-004 | Mark historical audits | P3 | S | ANALYSIS accepted | 2 | Old reports are retained with an explicit superseded marker. |
+| DOC-002 | Refresh README and agent guidance | P1 | M | DOC-001, ARCH-001, test baseline | 2 | Public docs and `AGENTS.md` match code, license, commands, and coverage scope; `CLAUDE.md` remains Claude-specific. |
+| DOC-003 | Retire stale coverage report | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material claims were assessed in `ANALYSIS.md`, then the stale static report was removed. Future evidence must be CI-generated. |
+| DOC-004 | Retire stale audit and code review | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material findings were reconciled into `ANALYSIS.md` and this roadmap, then both stale reports were removed. |
 | DOC-005 | Correct local headers/docstrings | P2 | S | BUG/TEST stabilization | 1 | Source comments and docstrings name the correct file/behavior. |
 | GH-002 | Improve public repository presentation | P2 | S | ARCH-002, DOC-002 | 2 | Description/topics/presentation reviewed and recorded. |
 | GH-003 | Protection and releases | P2 | S | GH-001 | 2 | Required checks/protection/release policy configured and documented. |
@@ -219,8 +216,8 @@ Measure improvement with evidence, not just checklist completion:
 - BUG-001, BUG-004, BUG-005, and the chosen count/finite-number policy have direct regression tests.
 - No duplicate production implementation is described as independent without provenance.
 - Every retained test fixture/marker and test file has a meaningful, direct purpose.
-- README, CLAUDE, LICENSE, and GitHub metadata agree on project purpose, license, and canonical usage.
-- Old reports are visibly historical; the roadmap has one accepted current tracker.
+- README, `AGENTS.md`, LICENSE, and GitHub metadata agree on project purpose, license, and canonical usage.
+- Material findings from retired reports are captured in `ANALYSIS.md`; the roadmap is the one accepted current tracker.
 - Default `main` has required checks only after those checks are reliable.
 - Zero reportable security findings remain for the local CLI scope; any new external I/O feature triggers a scoped security review.
 
@@ -235,5 +232,5 @@ Measure improvement with evidence, not just checklist completion:
 7. Extract/directly test the agreed core; remove only proven duplicate tests and fixtures.
 8. Declare Python/dev tooling, then run and fix the actual lint/type/test baseline.
 9. Add minimal CI; verify it before Dependabot, protection, or release changes.
-10. Refresh README/CLAUDE and mark historical reports accurately.
+10. Refresh README and `AGENTS.md` after the canonical variant and test baseline are settled.
 11. Select at most one Phase 3 feature based on the chosen identity and demonstrated maintenance capacity.
