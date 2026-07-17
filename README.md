@@ -24,7 +24,7 @@ An educational Python repository demonstrating various approaches to summing num
 
 ## Tests
 
-The repository includes a comprehensive pytest suite with 179 test cases covering all implementations.
+The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. Current test totals and coverage are not claimed until the project has a declared toolchain and CI-generated results.
 
 ```bash
 # Run all tests
@@ -33,8 +33,6 @@ pytest tests/
 # Run with verbose output
 pytest tests/ -v
 ```
-
-See `TEST_COVERAGE_REPORT.md` for the full coverage report.
 
 ## License
 
