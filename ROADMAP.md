@@ -1,176 +1,239 @@
 # Project Roadmap
 
-**Date:** 2026-07-12 · **Derived from:** `ANALYSIS.md` (same date, commit `19cf2ec`)
+**Source of truth:** Verified findings in [ANALYSIS.md](ANALYSIS.md), audited 2026-07-14.
 
-Every item below traces to a finding verified in `ANALYSIS.md`. Nothing was copied from
-older lists (`CODE_REVIEW.md`, `AUDIT.md`) without re-verification; items those documents
-raised that are already fixed (CR-7, CR-8, the master→main migration) do not appear here.
+**Planning boundary:** This roadmap does not authorize a broad refactor, branch deletion, history rewrite, release, issue closure, or GitHub settings change. A 2026-07-17 `git fetch --prune origin` confirmed that local `master` is fully merged into `origin/main` (0 unique commits; 9 commits behind), so future implementation should start from fresh `main`.
 
 ## Roadmap Principles
 
-Priority order is decided by, in order: (1) **user/reader impact** — this is an educational
-repo, so anything that misleads a reader (wrong license, fake "distinct implementation",
-false test confidence) outranks code polish; (2) **severity** — reachable crashes before
-hygiene; (3) **risk reduction per unit effort** — CI and packaging are cheap and protect
-everything after them; (4) **dependency order** — packaging before CI, CI before
-refactoring, decisions (license, mission) before the docs that encode them;
-(5) **strategic fit** — features must serve the teaching mission.
+Prioritize work by:
 
----
+1. User impact and correctness before feature growth.
+2. Legal, security, data-integrity, and repository-source-of-truth risk before cosmetic cleanup.
+3. Explicit dependency order: decide the canonical product/architecture before moving or deleting variants.
+4. Directly tested behavior over test count or historical coverage claims.
+5. Reproducible local tooling before required CI/protection rules.
+6. Small, reviewable changes that preserve historical teaching artifacts.
+7. A clear distinction between verified defects, maintenance work, committed plans, optional enhancements, and speculative directions.
+
+Each implementation change should begin from a fresh, clean `main` worktree, use focused commits, and update the canonical tracker rather than copying stale checklists forward.
 
 ## Phase 0: Immediate Safety and Repository Hygiene
 
-| Item | What / Why |
-|---|---|
-| **DOC-001** | **Resolve the license contradiction.** `LICENSE` = GPL v3; `README.md:39-41` and `CLAUDE.md` claim Apache 2.0. Owner decides: (a) keep GPL v3 → fix both docs; (b) relicense to Apache-2.0 or MIT (repo has a single copyright holder, so this is possible) → replace `LICENSE`. Until decided, docs must at minimum stop asserting Apache. |
-| **BUG-001** | **Fix the reproducible crash** in `demos/summing_methods.py:66` (`show_two_number_demo`): entering one number raises `ValueError`. Loop until ≥2 numbers are supplied (fix sketch already in CODE_REVIEW.md CR-1). Add a regression test. |
+### Decision and source-of-truth gate
 
-*Not needed in Phase 0 (already done):* default-branch migration (`main` is default,
-`master` deleted), branch cleanup (remote has only `main`), secret removal (none exist),
-broken builds/failing tests (suite is green).
+- **GH-005 — Completed 2026-07-17: reconcile the stale local clone with GitHub `main`.** A fresh fetch/prune confirmed `master` has no unique commits and `origin/master` is absent. Do not delete the active local `master` worktree automatically; start new implementation branches from current `main`.
+- **DOC-001 — Resolve the GPL-3.0/Apache-2.0 contradiction.** Treat `LICENSE` as the current legal source; obtain the maintainer's intended license before changing `LICENSE`, README, CLAUDE, badges, or release metadata.
+- **SEC-001 — Record security closure.** No confirmed exploitable security defect requires emergency code remediation. Keep this result scoped to the local CLI; reassess if file, network, web, plugin, or persistence functionality is added.
+
+### Immediate behavior repair
+
+- **BUG-001 — Fix the two-number demo contract.** Make `show_two_number_demo()` request/validate exactly two values and give a friendly retry message rather than destructuring an undersized list.
+- Add a focused regression test before considering the historical “179 tests” claim meaningful.
+
+**Exit criteria:** Fresh `main` is identified as the implementation base; intended license is recorded; the one-number crash has a direct failing-then-passing regression test; no user work or unmerged branch is discarded.
 
 ## Phase 1: Stabilization
 
-| Item | What / Why |
-|---|---|
-| **BUG-002** | Replace `sys.path.append(".")` in `SumImprovedbyChatGPTv2.py:9` with `Path(__file__).parent` (last remaining instance; CR-2). |
-| **ARCH-001** | Resolve the byte-identical duplicate: rewrite `SumImprovedbyChatGPT.py` as a short genuine demo that *imports* `demos.summing_methods` (matching what README/CLAUDE.md already claim it is), or delete it and update both docs. Decide `SumImprovedbyChatGPTv2.py`'s fate in the same pass (it is a test module, not a runnable variant — NEW-4). |
-| **TEST-001** | Delete `tests/test_original_summing_methods.py` (100% duplicate of `test_summation_methods.py:1-108`; CR-4) and update CLAUDE.md's test table. |
-| **TEST-002** | Add `get_number` tests for all three Claude variants (mock `builtins.input`; valid, invalid-then-retry, float/int modes, negatives; CR-5). Delete the misleading "we'll test it in integration" comment at `test_input_validation.py:141-143`. |
-| **DX-001** | Add `requirements-dev.txt` (pytest, pytest-cov, ruff) and a minimal `pyproject.toml` with `requires-python >= 3.8` (N-4/DEP-1). Update README quick-start. |
-| **DOC-005** | Small source-doc corrections: `SumImprovedbyClaudeCode.py:2` docstring says "number" but accepts only integers (CR-9); wrong `# file:` headers in 3 files (CR-14). |
+### Correctness and reliability
+
+- **BUG-004 — Preserve strict-integer precision.** Do not convert valid integer input through `float`. Decide whether integer-mode APIs return `int` values and how `math.fsum` is presented when values exceed exact floating-point range. Add a `2**53` regression case.
+- **BUG-005 — Handle EOF cleanly.** Catch `EOFError` at prompt boundaries and exit/return with a user-facing message. Test redirected/closed stdin behavior.
+- **UX-001 — Define the numeric contract.** Decide whether `nan`, `inf`, and `-inf` are supported lessons or rejected calculator input. Document the rule and test it.
+- **TEST-005 — Define a count limit or explicit non-interactive alternative.** A menu-driven prompt loop should reject unreasonable counts or avoid prompting one number at a time for batch use. Test the chosen boundary.
+- **BUG-002 — Remove fragile path manipulation.** Eliminate the root `sys.path.append(".")` test-module workaround through proper packaging or repository-relative test discovery.
+- **BUG-003 — Remove redundant integer casts.** Make the `get_number(..., allow_float=False)` return contract explicit and remove `int(count)` noise.
+
+### Direct evidence tests
+
+- **TEST-002 — Test every Claude `get_number` variant directly.** Use patched `input()` and cover valid, invalid-then-valid, integer-only, float, negative, and EOF cases as applicable.
+- **TEST-003 — Stop testing local reimplementations.** Extract pure `custom_sum` and sign-breakdown helpers from v2/v3 or explicitly remove false-coverage tests until an extraction is accepted.
+
+### Documentation corrections that unblock use
+
+- **DOC-005 — Correct copied headers and misleading docstrings.** This includes the integer-only v1 docstring and mismatched `# file:` comments.
+- Correct README and CLAUDE license statements immediately after DOC-001 is decided; do not make other broad prose claims until tests and architecture are settled.
+
+**Exit criteria:** Reproduced correctness/reliability defects have direct passing tests; input semantics are documented; no test claims coverage of a local copy instead of the implementation it purports to validate.
 
 ## Phase 2: Maintainability and Developer Experience
 
-| Item | What / Why |
-|---|---|
-| **GH-001** | Add `.github/workflows/ci.yml`: `pytest` + `ruff check` on a Python 3.9–3.13 matrix (N-3/CI-1). ~30 lines; protects everything else. |
-| **DX-002** | Fix the 10 ruff findings (unused imports, `F541` at `SumImprovedbyClaudeCodev3.py:97`) and add ruff config that scopes `E402` for the test bootstrap pattern (NEW-6, CR-13). |
-| **TEST-003** | Test source instead of copies: extract `analyze_numbers()` and `custom_sum()` to module level in `SumImprovedbyClaudeCodev3.py`/`v2` (keeping interactive wrappers), point `test_analysis_functions.py`/`test_custom_implementations.py` at the real functions (CR-10/CR-15), and make `test_module_has_docstring` assert a real docstring (add one to `demos/summing_methods.py`; CR-11). |
-| **TEST-004** | Prune `tests/conftest.py`: all ~30 fixtures and 4 markers are unused (NEW-2). Keep the path bootstrap; delete or actually employ the rest. |
-| **TEST-005** | Document that `get_multiple_numbers(count)` is uncapped and add a behavior test (CR-16). |
-| **GH-004** | Add `dependabot.yml` for the `github-actions` ecosystem (only meaningful after GH-001). |
+### Architecture decision and cleanup
+
+- **ARCH-002 — Choose the primary identity.** Select one: (a) a concise Python summation tutorial with historical AI variants, or (b) an AI-code-evolution comparison artifact. This is a maintainer decision gate, not an automatic refactor.
+- **ARCH-001 — Establish a canonical implementation.** After ARCH-002, label `demos/summing_methods.py` as canonical, rewrite `SumImprovedbyChatGPT.py` as a real example, or move/archive the duplicate as a documented historical artifact. Preserve provenance.
+- Move input, summation, and statistics into testable pure functions only after the canonical structure is agreed.
+
+### Test and tooling hygiene
+
+- **TEST-001 — Consolidate duplicate core tests.** Preserve unique cases, delete only a proven duplicate after current CI passes.
+- **TEST-004 — Remove or purposefully use unused fixtures and markers.** Do not retain a fixture catalogue that no test consumes.
+- **DX-001 — Declare the development environment.** Prefer a small `pyproject.toml` with supported Python versions and pytest/Ruff/type-check dependencies, or an equivalent documented requirements file. Match the command set to the actual project size.
+- **DX-002 — Establish and fix a current lint baseline.** Run Ruff from the declared environment, capture exact output, then fix/remediate all agreed rules; do not rely on the old “10 findings” count.
+- Add a minimal formatter/type-check policy only if it fits the canonical Python version and code style.
+
+### Automation and documentation
+
+- **GH-001 — Add minimal GitHub Actions CI.** Run syntax/tooling, pytest, Ruff, and any chosen type check on supported Python versions. Keep the workflow simple and deterministic.
+- **GH-004 — Add Dependabot after dependencies and CI exist.** Configure only ecosystems actually declared.
+- **DOC-002 — Refresh `CLAUDE.md`.** Make it a concise, accurate guide to the canonical variant, historical variants, commands, branch policy, and repository-relative paths.
+- **DOC-003 — Retire the stale coverage report as a live claim.** Replace it with CI-generated evidence or move it to historical documentation.
+- **DOC-004 — Mark old reviews as historical.** Add a short superseded banner to `AUDIT.md` and `CODE_REVIEW.md`; retain provenance rather than deleting them.
+- Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` after the command baseline is known.
+
+**Exit criteria:** A new contributor can install one declared toolchain, run the same checks locally and in CI, understand which implementation is canonical, and distinguish historical documents from current guidance.
 
 ## Phase 3: Product Improvements
 
-| Item | What / Why |
-|---|---|
-| **ARCH-002** | Decide and state the primary mission (Python summation reference vs. AI-assistant comparison; N-8). One paragraph at the top of README leads with the winner and names the other as secondary. |
-| **DOC-002** | CLAUDE.md refresh: license line, stray-space naming template (CR-6), version note on the `get_number` pattern (CR-17), temper the "Sum.py is testable" claim (N-7), bump "Last Updated". |
-| **DOC-003** | Refresh `TEST_COVERAGE_REPORT.md` numbers (179 passing / 0 skipped / 7 modules) or archive it once CI reports coverage (NEW-5). |
-| **DOC-004** | Add "Superseded by ANALYSIS.md (2026-07-12)" banners to `CODE_REVIEW.md` and `AUDIT.md`, or move both to `docs/archive/` (NEW-9). |
-| **FEAT-003** | Extend v3's analysis with mean/median/min/max — small, fits the lesson. |
-| **GH-002** | Repo metadata: add topics (`python`, `education`, `tutorial`, `ai-assisted-development`), disable unused wiki/projects, consider a social preview image. |
+These are optional user-facing improvements that fit the existing educational identity. Start only after Phases 0–2 exit criteria are met.
+
+- **FEAT-003 — Extract and present number statistics.** Provide a pure function for count, positive/negative/zero groups, and totals; keep menu presentation thin. Value: demonstrates separation of concerns and enables direct tests. Complexity: small once ARCH-001 is complete.
+- **FEAT-001a — Add documented command-line arguments.** Support a simple one-shot sum without interactive prompts. Value: makes examples scriptable. Complexity: small-to-medium; depends on UX-001, BUG-005, DX-001, and canonical CLI ownership.
+- **FEAT-001b — Consider strict file input.** Only after arguments are stable. Define format, maximum size, encoding, errors, and finite-number policy. Complexity: medium; changes the security/resource model and needs renewed security review.
+- **FEAT-002 — Create a tutorial notebook or narrative lesson.** Value: makes the evolutionary educational story legible. Complexity: medium; depends on ARCH-002 and accurate docs.
+- Add compact README usage transcripts rather than a UI redesign. A screenshot/video is optional only if it materially improves discovery.
+
+**Exit criteria:** Each feature has a documented user problem, a direct test path, and does not blur the canonical-vs-historical variant distinction.
 
 ## Phase 4: Strategic Expansion
 
-| Item | What / Why |
-|---|---|
-| **FEAT-001** | `SumImprovedby…v4`: CLI arguments (`argparse`) and file input — continues the progression narrative into new teaching territory. |
-| **FEAT-002** | `tutorial.ipynb` walking the v1→v2→v3 diffs with commentary (AUDIT DIR-2). Highest educational payoff of any expansion. |
-| **GH-003** | Branch protection on `main` (require CI green) once GH-001 is stable; tag `v1.0` to mark the audited, stabilized state. |
+These directions are possible but require an explicit product decision and a separate architecture/threat-model review.
 
-## Exploratory Ideas (validate before committing)
+- **STRAT-001 — AI assistant comparison corpus.** Capture prompt, model/tool context, immutable source snapshot, evaluation rubric, and provenance for multiple implementation variants. Value: turns current history into a reusable learning artifact. Complexity: high; it is more than a summation tutorial.
+- **STRAT-002 — Multi-exercise learning collection.** Expand to other small programming tasks only if the project chooses the comparison/tutorial platform identity. Complexity: high; requires a new content model and release process.
+- **STRAT-003 — Release/distribution model.** Add tags, releases, changelog discipline, and potentially a package only after users need installation rather than source reading.
 
-- **Multi-problem AI benchmark** (AUDIT DIR-1): generalize "same prompt, many assistants" to
-  FizzBuzz, etc., with published comparisons. Changes the repo's identity — prototype in a
-  separate repo first, or decide via ARCH-002.
-- **Doc↔file-set consistency checker** (N-6): a `scripts/check_variants.py` in CI. Only
-  worth it if the variant count keeps growing.
+## Exploratory Ideas
+
+These are not committed backlog items. Validate them with a small written proposal or prototype first.
+
+- Property-based tests for numeric contracts and parser edge cases.
+- A benchmark lesson that teaches trade-offs among `sum`, `reduce`, and `math.fsum` without presenting educational variants as universal performance advice.
+- A one-page comparison matrix showing purpose, behavior, and test status for historical variants.
+- GitHub Pages documentation only if the tutorial/comparison direction gains enough material to justify it.
+
+For each exploratory item, define target reader, expected learning value, maintenance cost, and exit/stop condition before implementation.
 
 ## Deferred or Rejected Ideas
 
-- **Web interface, database history, async summation, logging framework** (from CLAUDE.md's
-  ideas list): rejected — operational complexity that teaches nothing about summation and
-  dwarfs the 565-LOC core.
-- **CONTRIBUTING.md / SECURITY.md / CODE_OF_CONDUCT.md / CHANGELOG.md**: deferred — single-
-  owner educational repo; git history and README suffice until outside contributors appear.
-- **Type-checking CI (mypy)**: deferred — only `demos/` is annotated; annotate first or not
-  at all.
-- **Renaming the repository**: deferred pending ARCH-002; a rename breaks inbound links for
-  marginal benefit.
+| Idea | Decision | Reason |
+| --- | --- | --- |
+| Web service / Flask / FastAPI interface | Deferred | Adds deployment, network, input-validation, and security complexity without serving the present educational goal. |
+| Database/history persistence | Deferred | No current user need; introduces state, privacy, migration, and release obligations. |
+| Authentication, accounts, or cloud hosting | Rejected for current scope | Fundamentally changes the local CLI threat model and project identity. |
+| Async summation | Rejected for current scope | Misleading for the CPU-bound, tiny educational calculations here. |
+| Automatic deletion of branches | Rejected now | Local/remote refs are stale and one local branch has unmerged history. |
+| Broad refactor during audit | Rejected | Must follow ARCH-002 and a fresh `main` reconciliation. |
 
-## Documentation Plan (dependency order)
+## Documentation Plan
 
-1. DOC-001 license decision → edit `LICENSE` and/or README+CLAUDE.md license lines.
-2. DOC-005 source docstrings/headers (independent, can land with Phase 1 code fixes).
-3. ARCH-002 mission decision → README lead paragraph.
-4. DOC-002 CLAUDE.md refresh (after ARCH-001/TEST-001 change the file/test tables it documents).
-5. DOC-003 TEST_COVERAGE_REPORT refresh-or-archive (after TEST-001..004 settle final counts).
-6. DOC-004 supersede banners on CODE_REVIEW.md / AUDIT.md (anytime; cheap).
+1. **DOC-001:** Record the intended license and make `LICENSE`, README, and CLAUDE agree.
+2. **DOC-005:** Correct concrete code headers/docstrings while behavior tests are added.
+3. **DOC-002:** Refresh README/CLAUDE around the selected canonical implementation and accurate test scope.
+4. **DOC-003:** Move or label `TEST_COVERAGE_REPORT.md` as historical; publish only CI-backed results thereafter.
+5. **DOC-004:** Add provenance-preserving historical banners to `AUDIT.md` and `CODE_REVIEW.md`.
+6. Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` from the actual declared toolchain and CI commands.
+7. Add `docs/architecture.md` only after ARCH-001/ARCH-002 are accepted; do not document a speculative structure as current fact.
 
 ## GitHub Improvement Plan
 
-- **Now:** topics; disable unused wiki/projects (manual, Settings → General).
-- **Phase 2:** CI workflow (GH-001); dependabot for actions (GH-004).
-- **Phase 4:** branch protection requiring CI (GH-003); first release tag `v1.0`.
-- **Manual-only checklist** (not API-accessible this session): social preview image, funding
-  config, rulesets review.
+1. **GH-005:** Use fresh `main` for future implementation branches; retain local `master` until its active worktree is moved safely.
+2. Coordinate with open PR #35 (DX-002) and #36 (DOC-005) before duplicating their scopes.
+3. **GH-001 / DX-001:** Add declared tooling and a minimal CI workflow; verify it on a branch before requiring it.
+4. **GH-002:** Manually review and improve description, URL, topics, social preview, README presentation, demo links, wiki/discussions/projects choice, and release visibility. Record exact settings changed separately from code commits.
+5. Add issue forms/templates and a pull-request template when contribution flow is documented.
+6. **GH-004:** Add Dependabot for declared ecosystems only.
+7. **GH-003:** After CI proves stable, configure branch protection/rulesets, required checks, and a release/tag policy. Do not assume current settings.
 
 ## Branch Cleanup Plan
 
-- **Safe to delete now:** none — remote already clean (only `main`).
-- **Review before deletion:** none.
-- **Keep:** `main` (default); `claude/repository-audit-roadmap-turb0r` until its PR merges,
-  then delete the remote branch as normal PR hygiene.
-- **Rename or migrate:** none — default branch is already `main`; `master` already removed.
-- **Manual GitHub action required:** none for branches.
+### Safe to delete now
+
+None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; that was not deletion of a local or remote branch.
+
+### Review before deletion
+
+| Ref | Required evidence before action |
+| --- | --- |
+| Local `master` | Move the active worktree safely to `main` and explicitly confirm the legacy local branch is no longer needed. It has no unique commits. |
+| Any newly discovered remote branch | Confirm no open PR, no unique commits, no active worktree/user, and safe recoverability from `main`. |
+
+### Keep
+
+| Branch | Reason |
+| --- | --- |
+| GitHub `main` | Current default and canonical public branch. |
+| Current local `master` | Active legacy checkout with no unique commits until the worktree is moved to `main`. |
+
+### Rename or migrate
+
+- GitHub needs no default-branch rename: `main` is already default.
+- GH-005 has confirmed that a local migration can start from fresh `main` without preserving a `master`-only commit. Update README badges, workflow references, deployment scripts, and external integrations only if a fresh search finds a `master` dependency.
+
+### Manual GitHub action required
+
+- Verify default-branch settings, protection/rulesets, required checks, deployment integration, and stale-branch state in the GitHub UI/API after CI is added.
+- Do not delete remote branches or change branch protection as part of documentation work.
 
 ## Milestone Table
 
-All items are tracked as GitHub issues (filed 2026-07-12).
-
-| ID | Issue | Initiative | Priority | Effort | Dependencies | Target Phase | Success Criteria |
-|---|---|---|---|---|---|---|---|
-| DOC-001 | [#7](https://github.com/ZacharyRW/Sum/issues/7) | Reconcile license (GPL v3 vs docs) | Critical | XS (after decision) | Owner decision | 0 | `LICENSE`, README, CLAUDE.md agree; GitHub badge matches README |
-| BUG-001 | [#8](https://github.com/ZacharyRW/Sum/issues/8) | Fix `show_two_number_demo` crash | Critical | XS | — | 0 | Single-number input retries instead of crashing; regression test passes |
-| BUG-002 | [#9](https://github.com/ZacharyRW/Sum/issues/9) | Fix `sys.path.append(".")` | High | XS | — | 1 | File imports demos from any cwd |
-| ARCH-001 | [#10](https://github.com/ZacharyRW/Sum/issues/10) | Resolve duplicate ChatGPT file(s) | High | S | Owner choice (rewrite vs delete) | 1 | No byte-identical files; docs describe reality |
-| TEST-001 | [#11](https://github.com/ZacharyRW/Sum/issues/11) | Remove duplicate test module | High | XS | ARCH-001 decision | 1 | Each test exists once; suite still ≥ ~163 unique cases, green |
-| TEST-002 | [#12](https://github.com/ZacharyRW/Sum/issues/12) | Test `get_number` (3 variants) | High | S | — | 1 | Coverage >0% on all three Claude variants |
-| DX-001 | [#13](https://github.com/ZacharyRW/Sum/issues/13) | requirements-dev.txt + pyproject.toml | High | XS | — | 1 | Fresh clone: `pip install -r requirements-dev.txt && pytest` works |
-| DOC-005 | [#14](https://github.com/ZacharyRW/Sum/issues/14) | Docstring + `# file:` header fixes | Medium | XS | — | 1 | ruff/grep confirm headers match filenames |
-| BUG-003 | [#30](https://github.com/ZacharyRW/Sum/issues/30) | Remove redundant `int()` casts (CR-12) | Low | XS | — | 1 | No redundant casts; folds into the DX-002 hygiene PR |
-| GH-001 | [#15](https://github.com/ZacharyRW/Sum/issues/15) | CI workflow (pytest + ruff, 3.9–3.13) | High | S | DX-001 | 2 | Green check on PRs; badge in README |
-| DX-002 | [#16](https://github.com/ZacharyRW/Sum/issues/16) | Fix 10 ruff findings + config | Medium | XS | — | 2 | `ruff check .` exits 0 |
-| TEST-003 | [#17](https://github.com/ZacharyRW/Sum/issues/17) | Test source, not local copies | Medium | M | — | 2 | `test_analysis_functions`/`test_custom_implementations` import from source files |
-| TEST-004 | [#18](https://github.com/ZacharyRW/Sum/issues/18) | Prune dead conftest fixtures | Medium | S | TEST-003 (may reuse some) | 2 | No unused fixtures/markers; suite green |
-| TEST-005 | [#19](https://github.com/ZacharyRW/Sum/issues/19) | Document/test uncapped `count` | Low | XS | — | 2 | Docstring note + test exist |
-| GH-004 | [#20](https://github.com/ZacharyRW/Sum/issues/20) | Dependabot for actions | Low | XS | GH-001 | 2 | Config present, first PR auto-opened on action update |
-| ARCH-002 | [#21](https://github.com/ZacharyRW/Sum/issues/21) | Primary-mission decision + README lead | Medium | S | Owner decision | 3 | README first paragraph states one primary mission |
-| DOC-002 | [#22](https://github.com/ZacharyRW/Sum/issues/22) | CLAUDE.md refresh | Medium | S | ARCH-001, TEST-001 | 3 | No stale claims; naming template correct |
-| DOC-003 | [#23](https://github.com/ZacharyRW/Sum/issues/23) | Coverage report refresh/archive | Low | XS | TEST-001..004 | 3 | Report matches `pytest` output or is archived |
-| DOC-004 | [#24](https://github.com/ZacharyRW/Sum/issues/24) | Supersede banners on old audits | Low | XS | — | 3 | Both files point to ANALYSIS.md |
-| FEAT-003 | [#25](https://github.com/ZacharyRW/Sum/issues/25) | Stats in v3 analysis | Low | S | TEST-003 | 3 | New stats covered by tests |
-| GH-002 | [#26](https://github.com/ZacharyRW/Sum/issues/26) | Topics, disable wiki/projects | Low | XS | Manual settings access | 3 | Topics visible on repo page |
-| FEAT-001 | [#27](https://github.com/ZacharyRW/Sum/issues/27) | v4: CLI args + file input | Medium | M | ARCH-002 | 4 | New variant + tests + docs entry |
-| FEAT-002 | [#28](https://github.com/ZacharyRW/Sum/issues/28) | Tutorial notebook | Medium | M | ARCH-002 | 4 | `tutorial.ipynb` renders on GitHub, walks v1→v3 |
-| GH-003 | [#29](https://github.com/ZacharyRW/Sum/issues/29) | Branch protection + v1.0 tag | Low | XS | GH-001 | 4 | PRs require CI; release exists |
-
-Effort scale: XS ≤ 30 min · S ≤ 2 h · M ≤ 1 day.
+| ID | Initiative | Priority | Effort | Dependencies | Target phase | Success criteria |
+| --- | --- | --- | --- | --- | --- | --- |
+| GH-005 | Reconcile stale local clone with `main` | Complete | S | Network access; review of divergence | 0 | Completed 2026-07-17: fresh refs, no lost local commit, and `master` confirmed fully merged. |
+| DOC-001 | Resolve license contradiction | P0 | S | Maintainer decision | 0 | `LICENSE`, README, CLAUDE, and GitHub metadata agree. |
+| BUG-001 | Fix one-number demo crash | P0 | S | Fresh implementation base | 0 | One-number input retries/messages cleanly; regression test passes. |
+| SEC-001 | Preserve security-scope closure | P1 | S | None | 0 | Security posture accurately documented; renewed review gate exists for new I/O/network features. |
+| BUG-004 | Preserve integer precision | P1 | S | Numeric contract decision | 1 | `2**53`-range input retains exact integer sum or is explicitly unsupported. |
+| BUG-005 | Handle EOF | P1 | S | Canonical input helper | 1 | Closed stdin exits without traceback; direct test passes. |
+| UX-001 | Define finite-number and count policy | P1 | S | Product behavior decision | 1 | NaN/Inf and large-count behavior is documented and tested. |
+| TEST-002 | Direct Claude input tests | P1 | M | Testable input seam | 1 | Each supported variant has real mocked-input tests. |
+| TEST-003 | Replace local-copy tests | P1 | M | ARCH-001 | 1 | Tests import/exercise source functions rather than replicas. |
+| BUG-002 | Remove path hack | P2 | S | DX-001 or package decision | 1 | Tests run from documented working directories without `sys.path.append(".")`. |
+| BUG-003 | Remove redundant casts | P3 | S | Tests/type contract | 1 | No redundant count casts remain; lint baseline is cleaner. |
+| ARCH-002 | Choose project identity | P1 | S | Maintainer decision | 2 | One-sentence mission and canonical audience accepted. |
+| ARCH-001 | Establish canonical variant | P1 | M | ARCH-002 | 2 | Duplicate variant is rewritten/labeled/archived; docs name one canonical path. |
+| TEST-001 | Consolidate duplicate tests | P2 | S | Passing direct-test baseline | 2 | Duplicate suite removed or made meaningfully distinct. |
+| TEST-004 | Clean fixtures/markers | P3 | S | Passing test baseline | 2 | Every retained fixture/marker is used or removed. |
+| DX-001 | Declare toolchain | P1 | S | Supported Python decision | 2 | Fresh venv can install exact dev tools and run documented commands. |
+| DX-002 | Establish Ruff baseline | P2 | S | DX-001 | 2 | Ruff output is zero or has explicitly accepted, documented exceptions. |
+| GH-001 | Add CI | P1 | M | DX-001, direct tests | 2 | GitHub Actions runs documented checks reliably. |
+| GH-004 | Add Dependabot | P3 | S | DX-001, GH-001 | 2 | Automated dependency PRs cover actual declared ecosystems. |
+| DOC-002 | Refresh README/CLAUDE | P1 | M | DOC-001, ARCH-001, test baseline | 2 | Public docs match code, license, commands, and coverage scope. |
+| DOC-003 | Retire stale coverage report | P2 | S | GH-001 | 2 | Historical report is labeled/moved; current evidence is CI-generated. |
+| DOC-004 | Mark historical audits | P3 | S | ANALYSIS accepted | 2 | Old reports are retained with an explicit superseded marker. |
+| DOC-005 | Correct local headers/docstrings | P2 | S | BUG/TEST stabilization | 1 | Source comments and docstrings name the correct file/behavior. |
+| GH-002 | Improve public repository presentation | P2 | S | ARCH-002, DOC-002 | 2 | Description/topics/presentation reviewed and recorded. |
+| GH-003 | Protection and releases | P2 | S | GH-001 | 2 | Required checks/protection/release policy configured and documented. |
+| FEAT-003 | Add statistics lesson | P3 | M | ARCH-001, TEST-003 | 3 | Pure stats API and UI example have direct tests/docs. |
+| FEAT-001a | Add CLI args | P3 | M | UX-001, DX-001 | 3 | One-shot command is documented, tested, and handles invalid/EOF input. |
+| FEAT-001b | Add file input | P3 | M | FEAT-001a, renewed security review | 3 | Strict format/limits/errors/security behavior is defined and tested. |
+| FEAT-002 | Tutorial notebook | P3 | M | ARCH-002, DOC-002 | 3 | Notebook tells an accurate, maintained learning story. |
+| STRAT-001 | AI comparison corpus | Exploratory | L | ARCH-002; provenance proposal | 4 | Maintainer accepts a durable comparison model before expansion. |
 
 ## Success Metrics
 
-- `pytest tests/` green on a 3.9–3.13 CI matrix on every PR (currently: green locally only, no CI).
-- `ruff check .` exits 0 (currently: 10 errors).
-- Coverage >0% on **every** `Sum*.py` variant (currently: 0% on five of six).
-- Zero byte-identical file pairs; zero duplicated test modules (currently: one of each).
-- `LICENSE`, README, CLAUDE.md, and GitHub's license badge all agree (currently: contradictory).
-- Fresh-clone setup is one documented command (currently: pytest undeclared).
-- Interactive demos survive malformed input without tracebacks (currently: BUG-001 crash).
-- Old planning docs carry superseded banners; ANALYSIS.md/ROADMAP.md are the live plan.
+Measure improvement with evidence, not just checklist completion:
+
+- A clean clone/venv can install declared tools and run one documented validation command successfully.
+- CI runs the same suite on each proposed change and reports a clear pass/fail result.
+- BUG-001, BUG-004, BUG-005, and the chosen count/finite-number policy have direct regression tests.
+- No duplicate production implementation is described as independent without provenance.
+- Every retained test fixture/marker and test file has a meaningful, direct purpose.
+- README, CLAUDE, LICENSE, and GitHub metadata agree on project purpose, license, and canonical usage.
+- Old reports are visibly historical; the roadmap has one accepted current tracker.
+- Default `main` has required checks only after those checks are reliable.
+- Zero reportable security findings remain for the local CLI scope; any new external I/O feature triggers a scoped security review.
 
 ## Recommended Execution Order
 
-1. **DOC-001** — get the license decision from the owner; apply the 3-line fix. *(blocked on a human decision; everything else can proceed meanwhile)*
-2. **BUG-001** — fix the crash + regression test.
-3. **DX-001** — requirements-dev.txt + pyproject.toml.
-4. **GH-001** — CI workflow (so every later step lands under test).
-5. **ARCH-001** — rewrite-or-remove `SumImprovedbyChatGPT.py`; decide `…ChatGPTv2.py`.
-6. **TEST-001** — drop the duplicate test module.
-7. **BUG-002, BUG-003, DOC-005, DX-002** — one small "hygiene" PR.
-8. **TEST-002** — `get_number` tests.
-9. **TEST-003 → TEST-004 → TEST-005** — source-truth tests, conftest prune, count note.
-10. **ARCH-002 → DOC-002 → DOC-003 → DOC-004** — mission + documentation refresh.
-11. **GH-002, GH-004** — metadata + dependabot.
-12. **FEAT-003 → FEAT-001 → FEAT-002 → GH-003** — feature and release work as appetite allows.
+1. Start any implementation work from fresh GitHub `main`; do not delete the active legacy worktree as part of this documentation PR.
+2. Coordinate with open PR #35 (DX-002) and #36 (DOC-005) to avoid duplicate scope.
+3. Obtain the license decision and align the legal/public source of truth.
+4. Add failing tests for the one-number crash and large-integer precision loss; implement only those narrow fixes.
+5. Decide/implement EOF, finite-number, and count behavior with tests.
+6. Make the maintainer decision on project identity and canonical variant.
+7. Extract/directly test the agreed core; remove only proven duplicate tests and fixtures.
+8. Declare Python/dev tooling, then run and fix the actual lint/type/test baseline.
+9. Add minimal CI; verify it before Dependabot, protection, or release changes.
+10. Refresh README/CLAUDE and mark historical reports accurately.
+11. Select at most one Phase 3 feature based on the chosen identity and demonstrated maintenance capacity.
