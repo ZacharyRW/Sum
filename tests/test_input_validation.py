@@ -8,7 +8,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from demos.summing_methods import parse_numbers
+from demos.summing_methods import parse_numbers, show_two_number_demo
 
 
 class TestParseNumbers:
@@ -136,6 +136,16 @@ class TestParseNumbers:
         with patch('builtins.input', return_value='-0'):
             result = parse_numbers("Enter: ", allow_float=True)
             assert result == [-0.0]
+
+
+def test_two_number_demo_retries_after_one_number_input(capsys):
+    """The two-number demo should not crash when given only one integer."""
+    with patch('builtins.input', side_effect=['5', '3 5']):
+        show_two_number_demo()
+
+    output = capsys.readouterr().out
+    assert "Please enter exactly two integers separated by spaces." in output
+    assert "a + b               -> 8.0" in output
 
 
 # Tests for get_number function from other modules would go here
