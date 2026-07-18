@@ -8,7 +8,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-from demos.summing_methods import parse_numbers, show_two_number_demo
+from demos.summing_methods import main, parse_numbers, show_two_number_demo
 
 
 class TestParseNumbers:
@@ -62,6 +62,13 @@ class TestParseNumbers:
             result = parse_numbers("Enter: ", allow_float=False)
             assert result == [1000000.0, 2000000.0]
 
+    def test_integer_mode_preserves_large_integer_precision(self):
+        """Integer parsing must not round values larger than 2**53."""
+        with patch('builtins.input', return_value='9007199254740993 1'):
+            result = parse_numbers("Enter: ", allow_float=False)
+            assert result == [9007199254740993, 1]
+            assert all(isinstance(number, int) for number in result)
+
     def test_parse_scientific_notation(self):
         """Test parsing scientific notation (only with allow_float=True)."""
         with patch('builtins.input', return_value='1e10 3.5e-2'):
@@ -113,11 +120,20 @@ class TestParseNumbers:
                 assert result == [42.0]
                 mock_print.assert_called()
 
-    def test_accept_inf_in_float_mode(self):
-        """Test that 'inf' is accepted in float mode."""
-        with patch('builtins.input', return_value='inf'):
-            result = parse_numbers("Enter: ", allow_float=True)
-            assert result[0] == float('inf')
+    @pytest.mark.parametrize('nonfinite', ['nan', 'inf', '-inf'])
+    def test_reject_nonfinite_float_input(self, nonfinite):
+        """Float mode accepts finite values only."""
+        with patch('builtins.input', side_effect=[nonfinite, '1.25']):
+            with patch('builtins.print') as mock_print:
+                assert parse_numbers("Enter: ", allow_float=True) == [1.25]
+                mock_print.assert_called()
+
+    def test_eof_returns_none_with_friendly_message(self):
+        """Closed standard input should not leak an EOFError."""
+        with patch('builtins.input', side_effect=EOFError):
+            with patch('builtins.print') as mock_print:
+                assert parse_numbers("Enter: ", allow_float=False) is None
+                mock_print.assert_called_with("Input closed. Exiting this demo.")
 
     def test_whitespace_handling(self):
         """Test handling of extra whitespace."""
@@ -145,9 +161,11 @@ def test_two_number_demo_retries_after_one_number_input(capsys):
 
     output = capsys.readouterr().out
     assert "Please enter exactly two integers separated by spaces." in output
-    assert "a + b               -> 8.0" in output
+    assert "a + b               -> 8" in output
 
 
-# Tests for get_number function from other modules would go here
-# Note: get_number is defined in multiple files with slight variations
-# We'll test the pattern in the integration tests
+def test_main_stops_after_eof_in_the_first_demo(capsys):
+    with patch('builtins.input', side_effect=EOFError):
+        main()
+
+    assert capsys.readouterr().out.count("Input closed. Exiting this demo.") == 1

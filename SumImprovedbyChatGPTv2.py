@@ -1,12 +1,6 @@
-# file: tests/test_summing_methods.py
+"""Historical pytest-style summation checks."""
 import math
-import sys
-import types
 import pytest
-
-# Ensure the demo module is importable if tests run from repo root.
-# Why: keep tests robust to working directory differences.
-sys.path.append(".")
 
 from demos.summing_methods import (  # type: ignore
     add_plus,

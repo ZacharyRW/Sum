@@ -1,4 +1,4 @@
-# file: tests/test_summing_methods.py
+# Historical duplicate of the core summation tests.
 import math
 import sys
 import types
