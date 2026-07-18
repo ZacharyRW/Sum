@@ -63,7 +63,15 @@ def sum_fsum(nums: Iterable[float]) -> float:
 
 
 def show_two_number_demo() -> None:
-    a, b = parse_numbers("Enter two integers (e.g., 3 5): ", allow_float=False)[:2]
+    while True:
+        numbers = parse_numbers(
+            "Enter exactly two integers (e.g., 3 5): ", allow_float=False
+        )
+        if len(numbers) == 2:
+            a, b = numbers
+            break
+        print("Please enter exactly two integers separated by spaces.")
+
     print("\nTwo-number methods:")
     print(f"  a + b               -> {add_plus(a, b)}")
     print(f"  sum((a, b))         -> {add_sum(a, b)}")

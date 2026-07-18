@@ -23,13 +23,12 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 ### Decision and source-of-truth gate
 
 - **GH-005 — Completed 2026-07-17: reconcile the stale local clone with GitHub `main`.** A fresh fetch/prune confirmed `master` has no unique commits and `origin/master` is absent. Do not delete the active local `master` worktree automatically; start new implementation branches from current `main`.
-- **DOC-001 — Resolve the GPL-3.0/Apache-2.0 contradiction.** Treat `LICENSE` as the current legal source; obtain the maintainer's intended license before changing `LICENSE`, README, CLAUDE, badges, or release metadata.
+- **DOC-001 — Completed locally 2026-07-18: resolve the GPL-3.0/Apache-2.0 contradiction.** The maintainer selected GPL-3.0; `LICENSE`, README, and repository guidance now agree. Verify any GitHub metadata before claiming remote alignment.
 - **SEC-001 — Record security closure.** No confirmed exploitable security defect requires emergency code remediation. Keep this result scoped to the local CLI; reassess if file, network, web, plugin, or persistence functionality is added.
 
 ### Immediate behavior repair
 
-- **BUG-001 — Fix the two-number demo contract.** Make `show_two_number_demo()` request/validate exactly two values and give a friendly retry message rather than destructuring an undersized list.
-- Add a focused regression test before considering the historical “179 tests” claim meaningful.
+- **BUG-001 — Completed locally 2026-07-18: fix the two-number demo contract.** `show_two_number_demo()` now retries with a friendly message until exactly two integers are supplied; a direct regression test covers a one-number attempt.
 
 **Exit criteria:** Fresh `main` is identified as the implementation base; intended license is recorded; the one-number crash has a direct failing-then-passing regression test; no user work or unmerged branch is discarded.
 
@@ -177,8 +176,8 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | ID | Initiative | Priority | Effort | Dependencies | Target phase | Success criteria |
 | --- | --- | --- | --- | --- | --- | --- |
 | GH-005 | Reconcile stale local clone with `main` | Complete | S | Network access; review of divergence | 0 | Completed 2026-07-17: fresh refs, no lost local commit, and `master` confirmed fully merged. |
-| DOC-001 | Resolve license contradiction | P0 | S | Maintainer decision | 0 | `LICENSE`, README, CLAUDE, and GitHub metadata agree. |
-| BUG-001 | Fix one-number demo crash | P0 | S | Fresh implementation base | 0 | One-number input retries/messages cleanly; regression test passes. |
+| DOC-001 | Resolve license contradiction | Complete locally | S | Maintainer decision | 0 | GPL-3.0 selected; `LICENSE`, README, and repository guidance agree. Verify GitHub metadata before declaring remote alignment. |
+| BUG-001 | Fix one-number demo crash | Complete locally | S | Fresh implementation base | 0 | One-number input retries/messages cleanly; direct regression test added. |
 | SEC-001 | Preserve security-scope closure | P1 | S | None | 0 | Security posture accurately documented; renewed review gate exists for new I/O/network features. |
 | BUG-004 | Preserve integer precision | P1 | S | Numeric contract decision | 1 | `2**53`-range input retains exact integer sum or is explicitly unsupported. |
 | BUG-005 | Handle EOF | P1 | S | Canonical input helper | 1 | Closed stdin exits without traceback; direct test passes. |

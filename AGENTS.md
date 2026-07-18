@@ -6,7 +6,7 @@ Sum is an educational Python repository demonstrating summation techniques and p
 
 ## Authoritative sources
 
-- Current code and `LICENSE` are authoritative for behavior and licensing. The repository currently contains the GPL-3.0 license text.
+- Current code and `LICENSE` are authoritative for behavior and licensing. GPL-3.0 is the maintainer-selected license.
 - `ANALYSIS.md` is the current dated assessment; `ROADMAP.md` is the current execution tracker.
 - `README.md`, this guide, and generated reports must not make claims that conflict with current code, tests, or `LICENSE`.
 - Historical audit, review, and coverage reports were reviewed and removed on 2026-07-17. Do not recreate their stale test counts or coverage estimates as current evidence.
@@ -30,8 +30,7 @@ Sum is an educational Python repository demonstrating summation techniques and p
 
 ## Current caution points
 
-- The `LICENSE` is GPL-3.0 while public documentation may still contain older Apache-2.0 claims; resolve this through an explicit maintainer decision.
-- `show_two_number_demo()` has a confirmed one-number input crash, and integer parsing currently loses precision above `2**53`.
+- Integer parsing currently loses precision above `2**53`.
 - EOF handling, finite-number behavior, and input-count limits are not yet defined consistently.
 - The suite contains duplicate and indirect tests. Treat historical test/coverage claims as non-authoritative until a declared toolchain and CI produce current results.
 
