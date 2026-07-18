@@ -22,6 +22,16 @@ An educational Python repository demonstrating various approaches to summing num
 - Functional: `reduce(operator.add, nums, 0)`
 - High precision: `math.fsum(nums)`
 
+## Input Behavior
+
+- Integer prompts accept whole numbers and preserve their exact Python `int`
+  value, including values above `2**53`.
+- Float prompts accept finite values only; `nan`, `inf`, and `-inf` are
+  rejected.
+- Closing standard input ends the current demo with a friendly message instead
+  of a traceback.
+- The count-based Claude v2/v3 examples accept from 1 to 100 values per run.
+
 ## Tests
 
 The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. Current test totals and coverage are not claimed until the project has a declared toolchain and CI-generated results.

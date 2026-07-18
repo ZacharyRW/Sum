@@ -30,8 +30,6 @@ Sum is an educational Python repository demonstrating summation techniques and p
 
 ## Current caution points
 
-- Integer parsing currently loses precision above `2**53`.
-- EOF handling, finite-number behavior, and input-count limits are not yet defined consistently.
 - The suite contains duplicate and indirect tests. Treat historical test/coverage claims as non-authoritative until a declared toolchain and CI produce current results.
 
 ## Verification and Git

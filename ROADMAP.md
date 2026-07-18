@@ -36,21 +36,21 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 ### Correctness and reliability
 
-- **BUG-004 — Preserve strict-integer precision.** Do not convert valid integer input through `float`. Decide whether integer-mode APIs return `int` values and how `math.fsum` is presented when values exceed exact floating-point range. Add a `2**53` regression case.
-- **BUG-005 — Handle EOF cleanly.** Catch `EOFError` at prompt boundaries and exit/return with a user-facing message. Test redirected/closed stdin behavior.
-- **UX-001 — Define the numeric contract.** Decide whether `nan`, `inf`, and `-inf` are supported lessons or rejected calculator input. Document the rule and test it.
-- **TEST-005 — Define a count limit or explicit non-interactive alternative.** A menu-driven prompt loop should reject unreasonable counts or avoid prompting one number at a time for batch use. Test the chosen boundary.
-- **BUG-002 — Remove fragile path manipulation.** Eliminate the root `sys.path.append(".")` test-module workaround through proper packaging or repository-relative test discovery.
-- **BUG-003 — Remove redundant integer casts.** Make the `get_number(..., allow_float=False)` return contract explicit and remove `int(count)` noise.
+- **BUG-004 — Completed locally 2026-07-18: preserve strict-integer precision.** Integer mode returns exact `int` values; direct tests cover values above `2**53`.
+- **BUG-005 — Completed locally 2026-07-18: handle EOF cleanly.** Interactive input helpers return from the current demo with a user-facing message when standard input closes.
+- **UX-001 — Completed locally 2026-07-18: define the numeric contract.** Float prompts accept finite values only; `nan`, `inf`, and `-inf` are rejected and the rule is documented and tested.
+- **TEST-005 — Completed locally 2026-07-18: define a count limit.** Count-based Claude v2/v3 demos reject counts outside 1–100 before prompting for values.
+- **BUG-002 — Completed locally 2026-07-18: remove fragile path manipulation.** The root pytest-style historical module no longer mutates `sys.path`.
+- **BUG-003 — Completed locally 2026-07-18: remove redundant integer casts.** Count input returns an `int` in integer mode and callers pass it directly.
 
 ### Direct evidence tests
 
-- **TEST-002 — Test every Claude `get_number` variant directly.** Use patched `input()` and cover valid, invalid-then-valid, integer-only, float, negative, and EOF cases as applicable.
-- **TEST-003 — Stop testing local reimplementations.** Extract pure `custom_sum` and sign-breakdown helpers from v2/v3 or explicitly remove false-coverage tests until an extraction is accepted.
+- **TEST-002 — Completed locally 2026-07-18: test every Claude `get_number` variant directly.** Mocked-input tests cover retry, integer-only values, finite floats, negative values, and EOF.
+- **TEST-003 — Completed locally 2026-07-18: stop testing local reimplementations.** `custom_sum` and `analyze_numbers` are extracted source helpers and their tests import them directly.
 
 ### Documentation corrections that unblock use
 
-- **DOC-005 — Correct copied headers and misleading docstrings.** This includes the integer-only v1 docstring and mismatched `# file:` comments.
+- **DOC-005 — Completed locally 2026-07-18: correct copied headers and misleading docstrings.** Corrected the integer-only v1 docstring and replaced mismatched copied file headers.
 - Correct README and CLAUDE license statements immediately after DOC-001 is decided; do not make other broad prose claims until tests and architecture are settled.
 
 **Exit criteria:** Reproduced correctness/reliability defects have direct passing tests; input semantics are documented; no test claims coverage of a local copy instead of the implementation it purports to validate.
@@ -179,13 +179,13 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | DOC-001 | Resolve license contradiction | Complete locally | S | Maintainer decision | 0 | GPL-3.0 selected; `LICENSE`, README, and repository guidance agree. Verify GitHub metadata before declaring remote alignment. |
 | BUG-001 | Fix one-number demo crash | Complete locally | S | Fresh implementation base | 0 | One-number input retries/messages cleanly; direct regression test added. |
 | SEC-001 | Preserve security-scope closure | P1 | S | None | 0 | Security posture accurately documented; renewed review gate exists for new I/O/network features. |
-| BUG-004 | Preserve integer precision | P1 | S | Numeric contract decision | 1 | `2**53`-range input retains exact integer sum or is explicitly unsupported. |
-| BUG-005 | Handle EOF | P1 | S | Canonical input helper | 1 | Closed stdin exits without traceback; direct test passes. |
-| UX-001 | Define finite-number and count policy | P1 | S | Product behavior decision | 1 | NaN/Inf and large-count behavior is documented and tested. |
-| TEST-002 | Direct Claude input tests | P1 | M | Testable input seam | 1 | Each supported variant has real mocked-input tests. |
-| TEST-003 | Replace local-copy tests | P1 | M | ARCH-001 | 1 | Tests import/exercise source functions rather than replicas. |
-| BUG-002 | Remove path hack | P2 | S | DX-001 or package decision | 1 | Tests run from documented working directories without `sys.path.append(".")`. |
-| BUG-003 | Remove redundant casts | P3 | S | Tests/type contract | 1 | No redundant count casts remain; lint baseline is cleaner. |
+| BUG-004 | Preserve integer precision | Complete locally | S | Numeric contract decision | 1 | Integer mode retains exact `2**53`-range values; direct regression test passes. |
+| BUG-005 | Handle EOF | Complete locally | S | Canonical input helper | 1 | Closed stdin exits without traceback; direct tests pass. |
+| UX-001 | Define finite-number and count policy | Complete locally | S | Product behavior decision | 1 | Float input rejects NaN/Inf and count-based prompts accept 1–100; both are documented and tested. |
+| TEST-002 | Direct Claude input tests | Complete locally | M | Testable input seam | 1 | Each variant has real mocked-input retry, numeric-contract, and EOF tests. |
+| TEST-003 | Replace local-copy tests | Complete locally | M | ARCH-001 | 1 | Tests import and exercise extracted source helpers. |
+| BUG-002 | Remove path hack | Complete locally | S | DX-001 or package decision | 1 | Root historical test module no longer uses `sys.path.append(".")`. |
+| BUG-003 | Remove redundant casts | Complete locally | S | Tests/type contract | 1 | No redundant count casts remain. |
 | ARCH-002 | Choose project identity | P1 | S | Maintainer decision | 2 | One-sentence mission and canonical audience accepted. |
 | ARCH-001 | Establish canonical variant | P1 | M | ARCH-002 | 2 | Duplicate variant is rewritten/labeled/archived; docs name one canonical path. |
 | TEST-001 | Consolidate duplicate tests | P2 | S | Passing direct-test baseline | 2 | Duplicate suite removed or made meaningfully distinct. |
@@ -197,7 +197,7 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | DOC-002 | Refresh README and agent guidance | P1 | M | DOC-001, ARCH-001, test baseline | 2 | Public docs and `AGENTS.md` match code, license, commands, and coverage scope; `CLAUDE.md` remains Claude-specific. |
 | DOC-003 | Retire stale coverage report | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material claims were assessed in `ANALYSIS.md`, then the stale static report was removed. Future evidence must be CI-generated. |
 | DOC-004 | Retire stale audit and code review | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material findings were reconciled into `ANALYSIS.md` and this roadmap, then both stale reports were removed. |
-| DOC-005 | Correct local headers/docstrings | P2 | S | BUG/TEST stabilization | 1 | Source comments and docstrings name the correct file/behavior. |
+| DOC-005 | Correct local headers/docstrings | Complete locally | S | BUG/TEST stabilization | 1 | Source comments and docstrings name the correct file/behavior. |
 | GH-002 | Improve public repository presentation | P2 | S | ARCH-002, DOC-002 | 2 | Description/topics/presentation reviewed and recorded. |
 | GH-003 | Protection and releases | P2 | S | GH-001 | 2 | Required checks/protection/release policy configured and documented. |
 | FEAT-003 | Add statistics lesson | P3 | M | ARCH-001, TEST-003 | 3 | Pure stats API and UI example have direct tests/docs. |

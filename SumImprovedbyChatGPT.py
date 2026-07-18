@@ -1,4 +1,4 @@
-# file: demos/summing_methods.py
+# Historical ChatGPT summation variant.
 from __future__ import annotations
 
 import math

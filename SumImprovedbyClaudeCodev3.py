@@ -1,111 +1,158 @@
-def get_number(prompt, allow_float=True):
-    """Get a valid number from user with error handling (supports negative numbers)."""
+"""Historical Claude v3 menu-driven summation demonstration."""
+
+import math
+from collections.abc import Iterable
+from typing import Optional, Union
+
+Number = Union[int, float]
+MAX_INPUT_COUNT = 100
+
+
+def get_number(prompt: str, allow_float: bool = True) -> Optional[Number]:
+    """Read one finite number, or return ``None`` when input is closed."""
     while True:
         try:
             user_input = input(prompt)
-            if allow_float:
-                return float(user_input)
-            else:
-                return int(user_input)
-        except ValueError:
-            number_type = "number" if allow_float else "whole number"
-            print(f"Invalid input. Please enter a valid {number_type} (negative numbers allowed).")
+        except EOFError:
+            print("Input closed. Exiting this demo.")
+            return None
+
+        try:
+            number: Number = float(user_input) if allow_float else int(user_input)
+            if allow_float and not math.isfinite(number):
+                raise ValueError("numbers must be finite")
+            return number
+        except ValueError as exc:
+            number_type = "finite number" if allow_float else "whole number"
+            print(
+                f"Invalid input ({exc}). Please enter a valid {number_type} "
+                "(negative numbers allowed)."
+            )
 
 
-def get_multiple_numbers(count, allow_float=True):
-    """Get multiple numbers from the user."""
-    numbers = []
-    for i in range(count):
-        num = get_number(f'Enter number {i + 1}: ', allow_float)
-        numbers.append(num)
+def get_multiple_numbers(
+    count: int, allow_float: bool = True
+) -> Optional[list[Number]]:
+    """Read between one and ``MAX_INPUT_COUNT`` numbers from the user."""
+    if not 1 <= count <= MAX_INPUT_COUNT:
+        print(f"Please enter a count from 1 to {MAX_INPUT_COUNT}.")
+        return None
+
+    numbers: list[Number] = []
+    for index in range(count):
+        number = get_number(f"Enter number {index + 1}: ", allow_float)
+        if number is None:
+            return None
+        numbers.append(number)
     return numbers
 
 
-def method_two_integers():
+def custom_sum(numbers: Iterable[Number]) -> Number:
+    """Sum values manually without using Python's built-in ``sum``."""
+    total: Number = 0
+    for number in numbers:
+        total += number
+    return total
+
+
+def analyze_numbers(numbers: Iterable[Number]) -> dict[str, object]:
+    """Return the total and a sign-based breakdown for ``numbers``."""
+    values = list(numbers)
+    positive_numbers = [number for number in values if number > 0]
+    negative_numbers = [number for number in values if number < 0]
+    zero_numbers = [number for number in values if number == 0]
+    return {
+        "total": sum(values),
+        "positive": positive_numbers,
+        "negative": negative_numbers,
+        "zeros": zero_numbers,
+        "positive_sum": sum(positive_numbers),
+        "negative_sum": sum(negative_numbers),
+        "positive_count": len(positive_numbers),
+        "negative_count": len(negative_numbers),
+        "zero_count": len(zero_numbers),
+    }
+
+
+def method_two_integers() -> None:
     """Sum two integers."""
     print("\n=== Sum Two Integers ===")
-    x = get_number('Enter first number: ', allow_float=False)
-    y = get_number('Enter second number: ', allow_float=False)
-    result = x + y
-    print(f"Sum: {x} + {y} = {result}")
+    first = get_number("Enter first number: ", allow_float=False)
+    second = get_number("Enter second number: ", allow_float=False)
+    if first is None or second is None:
+        return
+    print(f"Sum: {first} + {second} = {first + second}")
 
 
-def method_two_floats():
-    """Sum two floating-point numbers."""
+def method_two_floats() -> None:
+    """Sum two finite floating-point numbers."""
     print("\n=== Sum Two Floats ===")
-    a = get_number('Enter first number: ')
-    b = get_number('Enter second number: ')
-    result = a + b
-    print(f"Sum: {a} + {b} = {result}")
+    first = get_number("Enter first number: ")
+    second = get_number("Enter second number: ")
+    if first is None or second is None:
+        return
+    print(f"Sum: {first} + {second} = {first + second}")
 
 
-def method_multiple_numbers():
-    """Sum multiple numbers."""
+def _read_count(prompt: str) -> Optional[int]:
+    count = get_number(prompt, allow_float=False)
+    if count is None:
+        return None
+    return count
+
+
+def method_multiple_numbers() -> None:
+    """Sum a bounded number of values."""
     print("\n=== Sum Multiple Numbers ===")
-    count = get_number('How many numbers do you want to sum? ', allow_float=False)
-    if count < 1:
-        print("Please enter at least 1 number.")
+    count = _read_count("How many numbers do you want to sum? ")
+    if count is None:
         return
-    
-    numbers = get_multiple_numbers(int(count))
-    result = sum(numbers)
-    
-    numbers_str = ' + '.join(str(n) for n in numbers)
-    print(f"Sum: {numbers_str} = {result}")
+    numbers = get_multiple_numbers(count)
+    if numbers is None:
+        return
+    print(f"Sum: {' + '.join(str(number) for number in numbers)} = {sum(numbers)}")
 
 
-def method_custom_sum():
-    """Custom summation implementation."""
+def method_custom_sum() -> None:
+    """Demonstrate the extracted custom summation function."""
     print("\n=== Custom Summation Function ===")
-    count = get_number('How many numbers? ', allow_float=False)
-    if count < 1:
-        print("Please enter at least 1 number.")
+    count = _read_count("How many numbers? ")
+    if count is None:
         return
-    
-    numbers = get_multiple_numbers(int(count))
-    
-    def custom_sum(nums):
-        """Custom implementation of sum without using built-in."""
-        total = 0
-        for num in nums:
-            total += num
-        return total
-    
-    result = custom_sum(numbers)
-    numbers_str = ' + '.join(str(n) for n in numbers)
-    print(f"Sum: {numbers_str} = {result}")
+    numbers = get_multiple_numbers(count)
+    if numbers is None:
+        return
+    print(
+        f"Sum: {' + '.join(str(number) for number in numbers)}"
+        f" = {custom_sum(numbers)}"
+    )
 
 
-def method_positive_negative_demo():
-    """Demonstrate summing positive and negative numbers."""
+def method_positive_negative_demo() -> None:
+    """Demonstrate a sign-based breakdown of finite numbers."""
     print("\n=== Positive and Negative Numbers Demo ===")
     print("Enter a mix of positive and negative numbers")
-    count = get_number('How many numbers? ', allow_float=False)
-    if count < 1:
-        print("Please enter at least 1 number.")
+    count = _read_count("How many numbers? ")
+    if count is None:
         return
-    
-    numbers = get_multiple_numbers(int(count))
-    result = sum(numbers)
-    
-    positive_nums = [n for n in numbers if n > 0]
-    negative_nums = [n for n in numbers if n < 0]
-    zero_nums = [n for n in numbers if n == 0]
-    
-    numbers_str = ' + '.join(str(n) for n in numbers)
-    print(f"\nSum: {numbers_str} = {result}")
-    print(f"\nBreakdown:")
-    print(f"  Positive numbers: {positive_nums} (sum: {sum(positive_nums) if positive_nums else 0})")
-    print(f"  Negative numbers: {negative_nums} (sum: {sum(negative_nums) if negative_nums else 0})")
-    if zero_nums:
-        print(f"  Zeros: {len(zero_nums)}")
+    numbers = get_multiple_numbers(count)
+    if numbers is None:
+        return
+
+    analysis = analyze_numbers(numbers)
+    print(f"\nSum: {' + '.join(str(number) for number in numbers)} = {analysis['total']}")
+    print("\nBreakdown:")
+    print(f"  Positive numbers: {analysis['positive']} (sum: {analysis['positive_sum']})")
+    print(f"  Negative numbers: {analysis['negative']} (sum: {analysis['negative_sum']})")
+    if analysis["zero_count"]:
+        print(f"  Zeros: {analysis['zero_count']}")
 
 
-def display_menu():
+def display_menu() -> None:
     """Display the main menu."""
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("Python Number Summation Examples")
-    print("="*50)
+    print("=" * 50)
     print("1. Sum two integers")
     print("2. Sum two floats")
     print("3. Sum multiple numbers")
@@ -113,48 +160,67 @@ def display_menu():
     print("5. Positive/Negative numbers demo")
     print("6. Run all examples")
     print("0. Exit")
-    print("="*50)
+    print("=" * 50)
 
 
-def run_all_examples():
-    """Run all example methods."""
+def _wait_for_enter(prompt: str) -> bool:
+    try:
+        input(prompt)
+    except EOFError:
+        print("Input closed. Exiting this demo.")
+        return False
+    return True
+
+
+def run_all_examples() -> None:
+    """Run all example methods until input closes."""
     method_two_integers()
-    input("\nPress Enter to continue...")
+    if not _wait_for_enter("\nPress Enter to continue..."):
+        return
     method_two_floats()
-    input("\nPress Enter to continue...")
+    if not _wait_for_enter("\nPress Enter to continue..."):
+        return
     method_multiple_numbers()
-    input("\nPress Enter to continue...")
+    if not _wait_for_enter("\nPress Enter to continue..."):
+        return
     method_custom_sum()
-    input("\nPress Enter to continue...")
+    if not _wait_for_enter("\nPress Enter to continue..."):
+        return
     method_positive_negative_demo()
 
 
-def main():
-    """Main program loop with menu system."""
+def main() -> None:
+    """Run the menu until the user exits or input closes."""
     while True:
         display_menu()
-        choice = input("\nEnter your choice (0-6): ")
-        
-        if choice == '1':
+        try:
+            choice = input("\nEnter your choice (0-6): ")
+        except EOFError:
+            print("Input closed. Exiting this demo.")
+            return
+
+        if choice == "1":
             method_two_integers()
-        elif choice == '2':
+        elif choice == "2":
             method_two_floats()
-        elif choice == '3':
+        elif choice == "3":
             method_multiple_numbers()
-        elif choice == '4':
+        elif choice == "4":
             method_custom_sum()
-        elif choice == '5':
+        elif choice == "5":
             method_positive_negative_demo()
-        elif choice == '6':
+        elif choice == "6":
             run_all_examples()
-        elif choice == '0':
+        elif choice == "0":
             print("\nThank you for using the summation examples!")
-            break
+            return
         else:
             print("\nInvalid choice. Please enter a number between 0 and 6.")
-        
-        if choice in ['1', '2', '3', '4', '5']:
-            input("\nPress Enter to return to menu...")
+
+        if choice in {"1", "2", "3", "4", "5"} and not _wait_for_enter(
+            "\nPress Enter to return to menu..."
+        ):
+            return
 
 
 if __name__ == "__main__":
