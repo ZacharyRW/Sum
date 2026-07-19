@@ -1,16 +1,16 @@
 # Project Analysis
 
 **Reconciled:** 2026-07-19 (America/Denver)
-**Base revision:** `main` at `5827008`
+**Verified revision:** `main` at `15b7df5`
 **Scope:** current working tree, current GitHub issue inventory, Actions history, and repository settings.
 
 ## Summary
 
 Sum is an educational Python summation tutorial. `demos/summing_methods.py` is the maintained reusable lesson; `history/` preserves runnable original and AI-assisted examples as comparison and provenance artifacts.
 
-The historical correctness, input-contract, duplicate-test, licensing, tooling, and canonical-implementation findings are resolved. The maintained project baseline is now **Python 3.10+**. This removes Python 3.9 from the package contract and CI matrix, and permits the declared pytest 9 development dependency. The compatibility change requires a green remote CI run after it reaches `main`.
+The historical correctness, input-contract, duplicate-test, licensing, tooling, and canonical-implementation findings are resolved. The maintained project baseline is **Python 3.10+**. Python 3.9 is absent from the package contract and CI matrix, and the declared pytest 9 development dependency is supported by a green remote run.
 
-No verified local application defect remains. The selected product improvement is canonical one-shot CLI input; remaining open GitHub work is repository administration, dependency review, security-scope bookkeeping, or deliberately deferred optional work.
+No verified local application defect remains. The canonical one-shot CLI is implemented. The only remaining open GitHub issues are deliberately deferred optional work.
 
 ## Current repository map
 
@@ -27,10 +27,10 @@ No verified local application defect remains. The selected product improvement i
 
 | Check | Status | Evidence |
 | --- | --- | --- |
-| Current default branch CI | Passed before this compatibility change | [CI run 29671934081](https://github.com/ZacharyRW/Sum/actions/runs/29671934081) passed on the former 3.9/3.11/3.14 matrix at `5827008`. |
-| New Python baseline | Local change pending remote verification | `requires-python` is `>=3.10`; CI targets 3.10/3.11/3.14; pytest is constrained to 9.x. |
+| Current default branch CI | Passed | [CI run 29676990969](https://github.com/ZacharyRW/Sum/actions/runs/29676990969) passed pytest and Ruff on Python 3.10, 3.11, and 3.14 at `15b7df5`. |
+| Python baseline | Verified | `requires-python` is `>=3.10`; CI targets 3.10/3.11/3.14; pytest is constrained to 9.x. |
 | Security scope | No reportable finding | Current runtime has no network, file, persistence, authentication, or external-service path. |
-| Branch protection | Not configured | GitHub returned “Branch not protected” for `main` on 2026-07-19. |
+| Branch protection | Configured | `main` requires the Python 3.10/3.11/3.14 checks; admin enforcement is enabled; force pushes and deletions are disabled. |
 
 Run the declared checks after installing the repository-local environment:
 
@@ -45,15 +45,15 @@ python3 -m venv .venv
 
 | Item | Current assessment | Next action |
 | --- | --- | --- |
-| #15 GH-001: CI | Former matrix was verified green; the new 3.10/3.11/3.14 matrix needs a post-push run. | Verify a green `main` run, then close the issue. |
+| #15 GH-001: CI | Closed 2026-07-19 after the verified 3.10/3.11/3.14 run. | None. |
 | #25 FEAT-003: statistics | Optional historical-v3 enhancement. | Select only if changing a comparison artifact has clear teaching value. |
-| #26 GH-002: public metadata | Description and five focused topics are configured; Wiki, Projects, and Discussions are disabled. | Close with the recorded settings. |
-| #27 FEAT-001: CLI/file input | Canonical `--numbers` CLI mode is implemented locally; file input remains out of scope pending a separate security review. | Verify the new CLI on remote CI, then update/close the issue. |
+| #26 GH-002: public metadata | Closed 2026-07-19: description and five focused topics are configured; Wiki, Projects, and Discussions are disabled. | None. |
+| #27 FEAT-001: CLI/file input | Closed 2026-07-19: canonical `--numbers` CLI mode is verified; file input remains a separate, unselected proposal. | Reassess only if file input is explicitly selected. |
 | #28 FEAT-002: tutorial notebook | Optional. | Require a defined reader, maintained imports, and reproducible execution. |
-| #29 GH-003: protection/release | CI is proven only for the former matrix; `main` is unprotected. | Configure protection after a green 3.10+ run and decide release policy separately. |
-| #44 SEC-001: security-scope closure | Current and accurate. | Close as a current-state result while retaining explicit reassessment triggers. |
+| #29 GH-003: protection/release | Closed 2026-07-19 after branch protection was configured. Releases remain intentional user-facing milestones, not an automatic `v1.0`. | None. |
+| #44 SEC-001: security-scope closure | Closed 2026-07-19 as a current-state result. | Reassess before file, network, web/plugin, persistence, hosted, or authentication capability. |
 
-Dependabot PRs #48 (checkout), #50 (setuptools), and #51 (pytest-cov) were reviewed and merged on 2026-07-19. The pytest 9 proposal (#49) is superseded by the compatibility migration, and the Ruff proposal (#52) is superseded by the final reconciliation commit after becoming unmergeable against the updated requirement file.
+Dependabot PRs #48 (checkout), #50 (setuptools), and #51 (pytest-cov) were reviewed and merged on 2026-07-19. The pytest 9 proposal (#49) and Ruff proposal (#52) are closed as superseded by the compatibility and reconciliation commits.
 
 ## Historical findings
 
