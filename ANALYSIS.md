@@ -10,6 +10,11 @@
 
 This is an evidence-based snapshot of the audited local revision, not a claim that `master` is current. The recheck establishes a clean migration path to `main`; reconcile these refreshed documents onto that branch before treating them as the repository's canonical plan.
 
+**Post-audit structural update (2026-07-19):** Historical scripts were moved
+to `history/` and renamed for clarity. The former root-level paths in this
+dated audit are retained as historical evidence; see `history/README.md` for
+the current-path mapping.
+
 ## Executive Summary
 
 Sum is a small, educational Python repository that demonstrates several ways to add numbers and preserves a visible history of AI-assisted iterations. Its core arithmetic is simple, readable, and dependency-free, and its small local-only attack surface produced no reportable security findings.

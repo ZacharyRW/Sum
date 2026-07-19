@@ -2,7 +2,7 @@
 
 ## Purpose and scope
 
-Sum is an educational Python summation tutorial that preserves AI-assisted implementation iterations as teaching artifacts. `demos/summing_methods.py` is the canonical reusable lesson; the root-level variants are historical, runnable examples unless their own documentation says otherwise.
+Sum is an educational Python summation tutorial that preserves AI-assisted implementation iterations as teaching artifacts. `demos/summing_methods.py` is the canonical reusable lesson; historical runnable examples live in `history/`.
 
 ## Authoritative sources
 
@@ -13,11 +13,12 @@ Sum is an educational Python summation tutorial that preserves AI-assisted imple
 
 ## Repository layout
 
-- `Sum.py`: original two-number CLI example.
 - `demos/summing_methods.py`: canonical reusable summation functions and interactive lesson.
-- `SumImprovedbyClaudeCode*.py`: historical, independently runnable Claude iterations.
-- `SumImprovedbyChatGPT.py`: historical ChatGPT entry point that delegates to the canonical lesson.
-- `SumImprovedbyChatGPTv2.py`: historical pytest snapshot; it is deliberately not collected.
+- `history/`: historical examples and former-name mapping; run examples as modules from the repository root.
+- `history/original_two_number.py`: original two-number CLI example.
+- `history/claude_v*_*.py`: historical, independently runnable Claude iterations.
+- `history/chatgpt_v1_entrypoint.py`: historical ChatGPT entry point that delegates to the canonical lesson.
+- `history/chatgpt_v2_test_snapshot.py`: historical pytest snapshot; it is deliberately not collected.
 - `tests/`: pytest suite; `test_summation_methods.py` is the single active core arithmetic suite.
 
 ## Working conventions

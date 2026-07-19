@@ -60,7 +60,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 ### Architecture decision and cleanup
 
 - **ARCH-002 — Completed locally 2026-07-18: choose the primary identity.** Sum is a concise Python summation tutorial that retains historical AI-assisted variants for comparison and provenance.
-- **ARCH-001 — Completed locally 2026-07-18: establish the canonical implementation.** `demos/summing_methods.py` is the canonical reusable lesson; `SumImprovedbyChatGPT.py` is a runnable historical entry point that delegates to it.
+- **ARCH-001 — Completed locally 2026-07-19: establish the canonical implementation.** `demos/summing_methods.py` is the canonical reusable lesson; historical examples now live in `history/`, and `history/chatgpt_v1_entrypoint.py` delegates to the canonical lesson.
 - Move input, summation, and statistics into testable pure functions only after the canonical structure is agreed.
 
 ### Test and tooling hygiene
@@ -187,7 +187,7 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | BUG-002 | Remove path hack | Complete locally | S | DX-001 or package decision | 1 | Root historical test module no longer uses `sys.path.append(".")`. |
 | BUG-003 | Remove redundant casts | Complete locally | S | Tests/type contract | 1 | No redundant count casts remain. |
 | ARCH-002 | Choose project identity | Complete locally | S | Maintainer decision | 2 | Sum is a concise Python summation tutorial with historical AI-assisted variants. |
-| ARCH-001 | Establish canonical variant | Complete locally | M | ARCH-002 | 2 | `demos/summing_methods.py` is canonical and the ChatGPT entry point delegates to it. |
+| ARCH-001 | Establish canonical variant | Complete locally | M | ARCH-002 | 2 | `demos/summing_methods.py` is canonical; `history/` preserves renamed historical examples and the ChatGPT entry point delegates to it. |
 | TEST-001 | Consolidate duplicate tests | Complete locally | S | Passing direct-test baseline | 2 | The collected duplicate module is removed; one active core arithmetic suite remains. |
 | TEST-004 | Clean fixtures/markers | P3 | S | Passing test baseline | 2 | Every retained fixture/marker is used or removed. |
 | DX-001 | Declare toolchain | Complete locally | S | Supported Python decision | 2 | `pyproject.toml`, `requirements-dev.txt`, and README declare a Python 3.9+ toolchain and documented checks. |

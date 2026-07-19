@@ -27,32 +27,31 @@ class TestModuleImports:
         except ImportError as e:
             pytest.fail(f"Failed to import demos.summing_methods: {e}")
 
-    def test_import_sum_basic(self):
-        """Test importing the basic Sum module."""
+    def test_import_original_two_number_example(self):
+        """Test importing the original historical two-number example."""
         try:
-            # Use relative path from repository root
-            sum_py_path = REPO_ROOT / "Sum.py"
-            assert sum_py_path.exists(), f"Sum.py not found at {sum_py_path}"
+            example_path = REPO_ROOT / "history" / "original_two_number.py"
+            assert example_path.exists(), f"Example not found at {example_path}"
 
-            spec = importlib.util.spec_from_file_location("Sum", str(sum_py_path))
-            sum_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(sum_module)
+            spec = importlib.util.spec_from_file_location(
+                "history.original_two_number", str(example_path)
+            )
+            example_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(example_module)
 
-            # Verify the module imported successfully
-            assert sum_module is not None
+            assert example_module is not None
 
-            # Verify the main function exists
-            assert hasattr(sum_module, 'main')
-            assert callable(sum_module.main)
+            assert hasattr(example_module, "main")
+            assert callable(example_module.main)
         except Exception as e:
-            pytest.fail(f"Failed to import Sum.py: {e}")
+            pytest.fail(f"Failed to import the original example: {e}")
 
     def test_chatgpt_entry_point_delegates_to_canonical_demo(self):
         """The historical ChatGPT entry point must not fork core behavior."""
-        import SumImprovedbyChatGPT
+        from history import chatgpt_v1_entrypoint
         from demos.summing_methods import main
 
-        assert SumImprovedbyChatGPT.main is main
+        assert chatgpt_v1_entrypoint.main is main
 
     def test_function_availability(self):
         """Test that all expected functions are available."""
