@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import argparse
 import math
 import operator
+import sys
 from functools import reduce
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, List, Optional, Sequence, Union
 
 Number = Union[int, float]
 
@@ -71,6 +73,45 @@ def sum_fsum(nums: Iterable[Number]) -> float:
     return math.fsum(nums)
 
 
+def parse_cli_numbers(
+    raw_numbers: Sequence[str], allow_float: bool = False
+) -> List[Number]:
+    """Parse command-line numbers using the lesson's numeric contract."""
+    numbers: List[Number] = []
+    number_type = "finite number" if allow_float else "whole number"
+    for raw_number in raw_numbers:
+        try:
+            number: Number = float(raw_number) if allow_float else int(raw_number)
+        except ValueError as exc:
+            raise ValueError(
+                f"{raw_number!r} is not a valid {number_type}."
+            ) from exc
+        if allow_float and not math.isfinite(number):
+            raise ValueError(f"{raw_number!r} is not a valid finite number.")
+        numbers.append(number)
+    return numbers
+
+
+def build_argument_parser() -> argparse.ArgumentParser:
+    """Build the optional one-shot command-line interface."""
+    parser = argparse.ArgumentParser(
+        description="Sum numbers without starting the interactive lesson."
+    )
+    parser.add_argument(
+        "--numbers",
+        metavar="NUMBER",
+        nargs=argparse.REMAINDER,
+        help="one or more numbers to sum; defaults to exact whole numbers",
+    )
+    parser.add_argument(
+        "--float",
+        dest="allow_float",
+        action="store_true",
+        help="parse --numbers as finite floating-point values",
+    )
+    return parser
+
+
 def show_two_number_demo() -> bool:
     """Show the two-number lesson and report whether input remained open."""
     while True:
@@ -103,12 +144,28 @@ def show_many_number_demo() -> bool:
     return True
 
 
-def main() -> None:
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    """Run the interactive lesson or one-shot command-line summation."""
+    parser = build_argument_parser()
+    arguments = parser.parse_args([] if argv is None else argv)
+    if arguments.numbers is not None:
+        if not arguments.numbers:
+            parser.error("--numbers requires at least one number.")
+        try:
+            numbers = parse_cli_numbers(arguments.numbers, arguments.allow_float)
+        except ValueError as exc:
+            parser.error(str(exc))
+        print(f"Sum: {sum_builtin(numbers)}")
+        return 0
+    if arguments.allow_float:
+        parser.error("--float requires --numbers.")
+
     print("== Summing in Python: multiple approaches ==")
     if not show_two_number_demo():
-        return
+        return 0
     show_many_number_demo()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main(sys.argv[1:]))

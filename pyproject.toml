@@ -7,7 +7,7 @@ name = "sum"
 version = "0.1.0"
 description = "Educational Python examples of summation techniques."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "GPL-3.0-only" }
 dependencies = []
 

@@ -20,19 +20,21 @@ Sum is an educational Python summation tutorial that preserves AI-assisted imple
 - `history/chatgpt_v1_entrypoint.py`: historical ChatGPT entry point that delegates to the canonical lesson.
 - `history/chatgpt_v2_test_snapshot.py`: historical pytest snapshot; it is deliberately not collected.
 - `tests/`: pytest suite; `test_summation_methods.py` is the single active core arithmetic suite.
+- Python 3.10 or later is supported; do not reintroduce Python 3.9 compatibility without an explicit maintainer decision.
 
 ## Working conventions
 
 - Inspect current code, `ANALYSIS.md`, and `ROADMAP.md` before proposing or implementing work.
 - Preserve historical variants unless the request explicitly authorizes moving, deleting, or rewriting them. Keep their provenance labels accurate when the canonical lesson changes.
 - Add focused regression tests for behavior changes. Do not claim coverage for a source function when a test exercises a local copy instead.
+- The canonical lesson supports a one-shot CLI through `python -m demos.summing_methods --numbers ...`; preserve no-argument interactive behavior and keep file input out of scope unless explicitly authorized with a new security review.
 - Keep documentation repository-relative and avoid volatile assertions about test counts, line counts, coverage percentages, or branch state unless freshly verified.
 - Use clear docstrings, type hints where they improve the lesson, PEP 8 formatting, and user-facing validation/error messages.
 - Do not shadow built-ins such as `sum`.
 
 ## Current caution points
 
-- The suite contains duplicate and indirect tests. Treat historical test/coverage claims as non-authoritative until a declared toolchain and CI produce current results.
+- Historical test and coverage claims are non-authoritative. Use the declared Python 3.10+ toolchain and current CI results when reporting verification evidence.
 
 ## Verification and Git
 
