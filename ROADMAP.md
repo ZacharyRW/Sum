@@ -5,57 +5,45 @@
 
 ## Current state
 
-The canonical lesson and historical artifacts are established, local correctness work is complete, and a former CI matrix passed on `main`. The active compatibility migration updates the supported matrix from Python 3.9/3.11/3.14 to **Python 3.10/3.11/3.14** and raises pytest to the compatible 9.x line. Do not call CI fully verified again until this revision passes remotely on `main`.
+The canonical lesson and historical artifacts are established, local correctness work is complete, and the supported matrix is **Python 3.10/3.11/3.14**. The compatibility migration, CLI improvement, and dependency reconciliation are verified by [CI run 29676990969](https://github.com/ZacharyRW/Sum/actions/runs/29676990969).
 
 No open issue represents a verified local application defect. The remaining work is grouped below so administration, maintenance, and optional features do not blur together.
 
-## Phase 1: Complete the Python 3.10+ migration
+## Completed: Python 3.10+ migration
 
 ### COMPAT-001 — Drop Python 3.9 support
 
-1. Declare `requires-python = ">=3.10"` in `pyproject.toml`.
-2. Use `pytest>=9,<10` in `requirements-dev.txt`.
-3. Run CI for Python 3.10, 3.11, and 3.14.
-4. Keep README, agent guidance, analysis, roadmap, and GitHub issue text aligned with the same baseline.
-5. Run the declared local pytest and Ruff checks, then push the focused change and verify a green `main` run.
+Completed 2026-07-19: `requires-python` is `>=3.10`; pytest is constrained to 9.x; Ruff targets Python 3.10; documentation and issue text are aligned; CI passes on Python 3.10, 3.11, and 3.14.
 
 **Success criteria:** package metadata, dependencies, documentation, and CI consistently require Python 3.10+; a remote `main` run is green for all three supported versions.
 
 ### Dependency follow-through
 
 - Completed: reviewed and merged Dependabot PRs #48 (checkout), #50 (setuptools), and #51 (pytest-cov).
-- Close #49 (pytest 9) as superseded by COMPAT-001.
-- Apply the reviewed Ruff floor from #52 directly in the reconciliation commit, then close #52 as superseded because its branch no longer merges cleanly.
+- Completed: #49 (pytest 9) and #52 (Ruff) are closed as superseded by the compatibility and reconciliation commits.
 - Keep automatic dependency merging disabled unless repository policy later explicitly authorizes it.
 
-## Phase 2: Close verified automation work
+## Completed: automation and GitHub administration
 
 ### #15 GH-001 — Verify CI workflow
 
-After COMPAT-001 reaches `main`, link the green 3.10/3.11/3.14 Actions run in [#15](https://github.com/ZacharyRW/Sum/issues/15) and close it.
+Completed 2026-07-19: [#15](https://github.com/ZacharyRW/Sum/issues/15) is closed with the green 3.10/3.11/3.14 run.
 
 **Success criteria:** the issue records the actual commands and matrix, rather than a historical claim that CI is missing.
 
-## Phase 3: GitHub administration
-
 ### #29 GH-003 — Protect `main` and define releases
 
-After #15 closes:
-
-1. Create a ruleset or branch-protection rule for `main`.
-2. Require the CI workflow, or the `Python 3.10`, `Python 3.11`, and `Python 3.14` checks if workflow-level protection is unavailable.
-3. Decide whether pull requests, approval dismissal, owner bypass, and Dependabot auto-merge fit the maintainer workflow.
-4. Define releases as intentional user-facing milestones, using tags/releases only when warranted; do not infer an automatic `v1.0`.
+Completed 2026-07-19: `main` requires the Python 3.10, 3.11, and 3.14 checks; admin enforcement is enabled; force pushes and deletions are disabled. No review-count, automatic dependency-merge, or automatic-release policy was added. Releases remain intentional user-facing milestones.
 
 ### #26 GH-002 — Review public presentation
 
-Completed 2026-07-19: the description identifies the educational tutorial and historical-comparison identity; topics are `python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`; Wiki, Projects, and Discussions are disabled. Close #26 with this record. A social image remains unnecessary unless it materially improves discovery.
+Completed 2026-07-19: [#26](https://github.com/ZacharyRW/Sum/issues/26) is closed; the description identifies the educational tutorial and historical-comparison identity; topics are `python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`; Wiki, Projects, and Discussions are disabled. A social image remains unnecessary unless it materially improves discovery.
 
-## Phase 4: Close the current security-scope item
+## Completed: security-scope record
 
 ### #44 SEC-001 — Preserve local CLI security closure
 
-Confirm the maintained scope remains local and in-memory, then close the issue as a current-state result. Reopen security review before file input, network access, web/plugin integration, persistence, hosted execution, or authentication.
+Completed 2026-07-19: [#44](https://github.com/ZacharyRW/Sum/issues/44) is closed as a current-state result. Reopen security review before file input, network access, web/plugin integration, persistence, hosted execution, or authentication.
 
 ## Phase 5: Optional product work
 
@@ -63,7 +51,7 @@ Select at most one initiative after Phases 1–4.
 
 | Issue | Initiative | Implementation boundary | Success criteria |
 | --- | --- | --- | --- |
-| #27 FEAT-001 | CLI arguments | Implemented locally: one-shot `--numbers` input in `demos/summing_methods.py` preserves no-argument interactive behavior. File input remains a separately approved feature. | Verify on remote CI, update/close #27, and retain the documented numeric/error/exit contract. |
+| #27 FEAT-001 | CLI arguments | Completed and closed: one-shot `--numbers` input in `demos/summing_methods.py` preserves no-argument interactive behavior. File input remains a separately approved feature. | Reassess only if file input is explicitly selected. |
 | #25 FEAT-003 | Historical v3 statistics | Extend only `history.claude_v3_menu_demo.analyze_numbers()` after defining empty-input, type, and precision behavior. | Direct helper tests and thin menu presentation; provenance remains clear. |
 | #28 FEAT-002 | Tutorial notebook | Import maintained code rather than copy it; clearly distinguish canonical and historical material. | Renders on GitHub and executes from a clean, documented environment. |
 
