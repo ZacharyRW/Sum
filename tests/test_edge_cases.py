@@ -1,18 +1,12 @@
 """Tests for edge cases and boundary conditions in summation."""
-import sys
 import math
-import pytest
-from pathlib import Path
+import sys
 
-# Add repository root to path
-REPO_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(REPO_ROOT))
+import pytest
 
 from demos.summing_methods import (
     add_plus,
-    add_sum,
     sum_builtin,
-    sum_reduce,
     sum_fsum,
 )
 

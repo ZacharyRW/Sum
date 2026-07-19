@@ -1,12 +1,7 @@
 """Tests for input validation functions."""
-import sys
 from unittest.mock import patch
-import pytest
-from pathlib import Path
 
-# Add repository root to path
-REPO_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(REPO_ROOT))
+import pytest
 
 from demos.summing_methods import main, parse_numbers, show_two_number_demo
 

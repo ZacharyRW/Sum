@@ -1,14 +1,12 @@
 """Integration tests for complete workflows and module imports."""
-import sys
 import importlib
 import importlib.util
-import pytest
 from pathlib import Path
 from unittest.mock import patch
 
-# Add repository root to path - works from any location
+import pytest
+
 REPO_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(REPO_ROOT))
 
 
 class TestModuleImports:

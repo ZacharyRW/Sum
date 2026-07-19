@@ -36,6 +36,6 @@ Sum is an educational Python summation tutorial that preserves AI-assisted imple
 
 ## Verification and Git
 
-- Install the declared development tools with `python -m pip install -r requirements-dev.txt`, then run `python -m pytest tests/` and `ruff check .`. There is no CI workflow yet.
+- Create a repository-local environment with `python3 -m venv .venv`, install the declared development tools with `./.venv/bin/python -m pip install -r requirements-dev.txt`, then run `./.venv/bin/python -m pytest tests/` and `./.venv/bin/python -m ruff check .`. The CI workflow runs the same checks.
 - Before making Git claims, check `git branch --show-current`, `git rev-parse --short HEAD`, and `git status --short`.
 - Push only when explicitly requested. Confirm the branch and staged scope immediately before committing or pushing.
