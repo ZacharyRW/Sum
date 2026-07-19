@@ -2,8 +2,8 @@
 
 import pytest
 
-from SumImprovedbyClaudeCodev2 import custom_sum as custom_sum_v2
-from SumImprovedbyClaudeCodev3 import custom_sum as custom_sum_v3
+from history.claude_v2_multiple_numbers import custom_sum as custom_sum_v2
+from history.claude_v3_menu_demo import custom_sum as custom_sum_v3
 
 
 @pytest.mark.parametrize("numbers", [[], [5], [1, 2, 3], [-5, 2, 3], [1.5, 2.5]])

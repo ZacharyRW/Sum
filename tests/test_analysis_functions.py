@@ -2,7 +2,7 @@
 
 import pytest
 
-from SumImprovedbyClaudeCodev3 import analyze_numbers
+from history.claude_v3_menu_demo import analyze_numbers
 
 
 @pytest.mark.parametrize(

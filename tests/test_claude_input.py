@@ -4,13 +4,13 @@ from unittest.mock import patch
 
 import pytest
 
-from SumImprovedbyClaudeCode import get_number as get_number_v1
-from SumImprovedbyClaudeCodev2 import (
+from history.claude_v1_integer_demo import get_number as get_number_v1
+from history.claude_v2_multiple_numbers import (
     MAX_INPUT_COUNT as MAX_INPUT_COUNT_V2,
     get_multiple_numbers as get_multiple_numbers_v2,
     get_number as get_number_v2,
 )
-from SumImprovedbyClaudeCodev3 import (
+from history.claude_v3_menu_demo import (
     MAX_INPUT_COUNT as MAX_INPUT_COUNT_V3,
     get_multiple_numbers as get_multiple_numbers_v3,
     get_number as get_number_v3,

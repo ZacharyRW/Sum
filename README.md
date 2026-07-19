@@ -1,20 +1,22 @@
 # Sum
 
 An educational Python summation tutorial. The maintained lesson is
-`demos/summing_methods.py`; the other scripts are runnable historical
-AI-assisted iterations retained for comparison and provenance.
+`demos/summing_methods.py`; the [`history/`](history/) package contains
+runnable historical AI-assisted iterations retained for comparison and
+provenance.
 
 ## Files
 
 | File | Description |
 |---|---|
 | `demos/summing_methods.py` | Canonical reusable summation lesson and interactive demo |
-| `SumImprovedbyChatGPT.py` | Historical ChatGPT entry point that runs the canonical lesson |
-| `Sum.py` | Historical original two-number CLI example |
-| `SumImprovedbyClaudeCode.py` | Historical Claude v1 integer-input demonstration |
-| `SumImprovedbyClaudeCodev2.py` | Historical Claude v2 float and multiple-number demonstration |
-| `SumImprovedbyClaudeCodev3.py` | Historical Claude v3 menu and sign-analysis demonstration |
-| `SumImprovedbyChatGPTv2.py` | Historical pytest snapshot; not part of the active test suite |
+| `history/` | Historical runnable examples and a former-name mapping |
+| `history/chatgpt_v1_entrypoint.py` | Historical ChatGPT entry point that runs the canonical lesson |
+| `history/original_two_number.py` | Historical original two-number CLI example |
+| `history/claude_v1_integer_demo.py` | Historical Claude v1 integer-input demonstration |
+| `history/claude_v2_multiple_numbers.py` | Historical Claude v2 float and multiple-number demonstration |
+| `history/claude_v3_menu_demo.py` | Historical Claude v3 menu and sign-analysis demonstration |
+| `history/chatgpt_v2_test_snapshot.py` | Historical pytest snapshot; not part of the active test suite |
 
 ## Summation Methods Demonstrated
 
@@ -36,7 +38,7 @@ AI-assisted iterations retained for comparison and provenance.
 
 ## Tests
 
-The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. `tests/test_summation_methods.py` is the single active core arithmetic suite; `SumImprovedbyChatGPTv2.py` is retained only as a historical test snapshot. The project requires Python 3.9 or later. Current test totals and coverage are not claimed until CI-generated results are available.
+The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. `tests/test_summation_methods.py` is the single active core arithmetic suite; `history/chatgpt_v2_test_snapshot.py` is retained only as a historical test snapshot. The project requires Python 3.9 or later. Current test totals and coverage are not claimed until CI-generated results are available.
 
 ```bash
 # Install the declared development toolchain
