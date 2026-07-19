@@ -59,15 +59,15 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 ### Architecture decision and cleanup
 
-- **ARCH-002 — Choose the primary identity.** Select one: (a) a concise Python summation tutorial with historical AI variants, or (b) an AI-code-evolution comparison artifact. This is a maintainer decision gate, not an automatic refactor.
-- **ARCH-001 — Establish a canonical implementation.** After ARCH-002, label `demos/summing_methods.py` as canonical, rewrite `SumImprovedbyChatGPT.py` as a real example, or move/archive the duplicate as a documented historical artifact. Preserve provenance.
+- **ARCH-002 — Completed locally 2026-07-18: choose the primary identity.** Sum is a concise Python summation tutorial that retains historical AI-assisted variants for comparison and provenance.
+- **ARCH-001 — Completed locally 2026-07-18: establish the canonical implementation.** `demos/summing_methods.py` is the canonical reusable lesson; `SumImprovedbyChatGPT.py` is a runnable historical entry point that delegates to it.
 - Move input, summation, and statistics into testable pure functions only after the canonical structure is agreed.
 
 ### Test and tooling hygiene
 
-- **TEST-001 — Consolidate duplicate core tests.** Preserve unique cases, delete only a proven duplicate after current CI passes.
+- **TEST-001 — Completed locally 2026-07-18: consolidate duplicate core tests.** Removed the collected duplicate module; `tests/test_summation_methods.py` is the single active core arithmetic suite, while the root-level ChatGPT v2 snapshot remains explicitly non-collected.
 - **TEST-004 — Remove or purposefully use unused fixtures and markers.** Do not retain a fixture catalogue that no test consumes.
-- **DX-001 — Declare the development environment.** Prefer a small `pyproject.toml` with supported Python versions and pytest/Ruff/type-check dependencies, or an equivalent documented requirements file. Match the command set to the actual project size.
+- **DX-001 — Completed locally 2026-07-18: declare the development environment.** `pyproject.toml` declares Python 3.9+ and test/lint configuration; `requirements-dev.txt` declares pytest, pytest-cov, and Ruff; README documents the install and check commands.
 - **DX-002 — Establish and fix a current lint baseline.** Run Ruff from the declared environment, capture exact output, then fix/remediate all agreed rules; do not rely on the old “10 findings” count.
 - Add a minimal formatter/type-check policy only if it fits the canonical Python version and code style.
 
@@ -75,7 +75,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 - **GH-001 — Add minimal GitHub Actions CI.** Run syntax/tooling, pytest, Ruff, and any chosen type check on supported Python versions. Keep the workflow simple and deterministic.
 - **GH-004 — Add Dependabot after dependencies and CI exist.** Configure only ecosystems actually declared.
-- **DOC-002 — Refresh agent guidance and public documentation.** `AGENTS.md` is now the canonical repository guide and `CLAUDE.md` is a Claude-specific pointer. Refresh README and agent guidance after the canonical variant and test baseline are decided.
+- **DOC-002 — Completed locally 2026-07-18: refresh agent guidance and public documentation.** README and `AGENTS.md` identify the canonical lesson, distinguish it from historical variants, and document the active core-test suite; `CLAUDE.md` remains a Claude-specific pointer.
 - Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` after the command baseline is known.
 
 **Exit criteria:** A new contributor can install one declared toolchain, run the same checks locally and in CI, understand which implementation is canonical, and distinguish historical documents from current guidance.
@@ -186,15 +186,15 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | TEST-003 | Replace local-copy tests | Complete locally | M | ARCH-001 | 1 | Tests import and exercise extracted source helpers. |
 | BUG-002 | Remove path hack | Complete locally | S | DX-001 or package decision | 1 | Root historical test module no longer uses `sys.path.append(".")`. |
 | BUG-003 | Remove redundant casts | Complete locally | S | Tests/type contract | 1 | No redundant count casts remain. |
-| ARCH-002 | Choose project identity | P1 | S | Maintainer decision | 2 | One-sentence mission and canonical audience accepted. |
-| ARCH-001 | Establish canonical variant | P1 | M | ARCH-002 | 2 | Duplicate variant is rewritten/labeled/archived; docs name one canonical path. |
-| TEST-001 | Consolidate duplicate tests | P2 | S | Passing direct-test baseline | 2 | Duplicate suite removed or made meaningfully distinct. |
+| ARCH-002 | Choose project identity | Complete locally | S | Maintainer decision | 2 | Sum is a concise Python summation tutorial with historical AI-assisted variants. |
+| ARCH-001 | Establish canonical variant | Complete locally | M | ARCH-002 | 2 | `demos/summing_methods.py` is canonical and the ChatGPT entry point delegates to it. |
+| TEST-001 | Consolidate duplicate tests | Complete locally | S | Passing direct-test baseline | 2 | The collected duplicate module is removed; one active core arithmetic suite remains. |
 | TEST-004 | Clean fixtures/markers | P3 | S | Passing test baseline | 2 | Every retained fixture/marker is used or removed. |
-| DX-001 | Declare toolchain | P1 | S | Supported Python decision | 2 | Fresh venv can install exact dev tools and run documented commands. |
+| DX-001 | Declare toolchain | Complete locally | S | Supported Python decision | 2 | `pyproject.toml`, `requirements-dev.txt`, and README declare a Python 3.9+ toolchain and documented checks. |
 | DX-002 | Establish Ruff baseline | P2 | S | DX-001 | 2 | Ruff output is zero or has explicitly accepted, documented exceptions. |
 | GH-001 | Add CI | P1 | M | DX-001, direct tests | 2 | GitHub Actions runs documented checks reliably. |
 | GH-004 | Add Dependabot | P3 | S | DX-001, GH-001 | 2 | Automated dependency PRs cover actual declared ecosystems. |
-| DOC-002 | Refresh README and agent guidance | P1 | M | DOC-001, ARCH-001, test baseline | 2 | Public docs and `AGENTS.md` match code, license, commands, and coverage scope; `CLAUDE.md` remains Claude-specific. |
+| DOC-002 | Refresh README and agent guidance | Complete locally | M | DOC-001, ARCH-001, test baseline | 2 | Public docs and `AGENTS.md` match the canonical lesson, historical variants, commands, and test scope; `CLAUDE.md` remains Claude-specific. |
 | DOC-003 | Retire stale coverage report | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material claims were assessed in `ANALYSIS.md`, then the stale static report was removed. Future evidence must be CI-generated. |
 | DOC-004 | Retire stale audit and code review | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material findings were reconciled into `ANALYSIS.md` and this roadmap, then both stale reports were removed. |
 | DOC-005 | Correct local headers/docstrings | Complete locally | S | BUG/TEST stabilization | 1 | Source comments and docstrings name the correct file/behavior. |

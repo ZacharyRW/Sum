@@ -1,3 +1,6 @@
+"""Historical Claude v1 two-number summation demonstration."""
+
+
 def get_number(prompt):
     """Get a valid whole number, or return ``None`` when input is closed."""
     while True:
