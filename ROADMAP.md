@@ -66,15 +66,15 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 ### Test and tooling hygiene
 
 - **TEST-001 — Completed locally 2026-07-18: consolidate duplicate core tests.** Removed the collected duplicate module; `tests/test_summation_methods.py` is the single active core arithmetic suite, while the root-level ChatGPT v2 snapshot remains explicitly non-collected.
-- **TEST-004 — Remove or purposefully use unused fixtures and markers.** Do not retain a fixture catalogue that no test consumes.
+- **TEST-004 — Completed locally 2026-07-18: remove unused fixtures and markers.** Deleted the unconsumed fixture catalogue and marker registrations; active tests use only direct parametrization and fixtures local to their test modules.
 - **DX-001 — Completed locally 2026-07-18: declare the development environment.** `pyproject.toml` declares Python 3.9+ and test/lint configuration; `requirements-dev.txt` declares pytest, pytest-cov, and Ruff; README documents the install and check commands.
-- **DX-002 — Establish and fix a current lint baseline.** Run Ruff from the declared environment, capture exact output, then fix/remediate all agreed rules; do not rely on the old “10 findings” count.
+- **DX-002 — Completed locally 2026-07-18: establish a current lint baseline.** Ruff 0.15.22 runs cleanly from the declared environment after removing path mutations and unused imports; do not rely on the old “10 findings” count.
 - Add a minimal formatter/type-check policy only if it fits the canonical Python version and code style.
 
 ### Automation and documentation
 
-- **GH-001 — Add minimal GitHub Actions CI.** Run syntax/tooling, pytest, Ruff, and any chosen type check on supported Python versions. Keep the workflow simple and deterministic.
-- **GH-004 — Add Dependabot after dependencies and CI exist.** Configure only ecosystems actually declared.
+- **GH-001 — Implemented locally 2026-07-18; remote verification pending.** The workflow installs the declared dependencies and runs pytest plus Ruff on Python 3.9, 3.11, and 3.14. Verify an Actions run after pushing.
+- **GH-004 — Implemented locally 2026-07-18; remote verification pending.** Dependabot is configured for the declared pip dependencies and GitHub Actions. Verify it after the configuration reaches the default branch.
 - **DOC-002 — Completed locally 2026-07-18: refresh agent guidance and public documentation.** README and `AGENTS.md` identify the canonical lesson, distinguish it from historical variants, and document the active core-test suite; `CLAUDE.md` remains a Claude-specific pointer.
 - Create `CONTRIBUTING.md`, `SECURITY.md`, and `docs/testing.md` after the command baseline is known.
 
@@ -189,11 +189,11 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | ARCH-002 | Choose project identity | Complete locally | S | Maintainer decision | 2 | Sum is a concise Python summation tutorial with historical AI-assisted variants. |
 | ARCH-001 | Establish canonical variant | Complete locally | M | ARCH-002 | 2 | `demos/summing_methods.py` is canonical; `history/` preserves renamed historical examples and the ChatGPT entry point delegates to it. |
 | TEST-001 | Consolidate duplicate tests | Complete locally | S | Passing direct-test baseline | 2 | The collected duplicate module is removed; one active core arithmetic suite remains. |
-| TEST-004 | Clean fixtures/markers | P3 | S | Passing test baseline | 2 | Every retained fixture/marker is used or removed. |
+| TEST-004 | Clean fixtures/markers | Complete locally | S | Passing test baseline | 2 | The unused fixture catalogue and unconsumed marker registrations were removed. |
 | DX-001 | Declare toolchain | Complete locally | S | Supported Python decision | 2 | `pyproject.toml`, `requirements-dev.txt`, and README declare a Python 3.9+ toolchain and documented checks. |
-| DX-002 | Establish Ruff baseline | P2 | S | DX-001 | 2 | Ruff output is zero or has explicitly accepted, documented exceptions. |
-| GH-001 | Add CI | P1 | M | DX-001, direct tests | 2 | GitHub Actions runs documented checks reliably. |
-| GH-004 | Add Dependabot | P3 | S | DX-001, GH-001 | 2 | Automated dependency PRs cover actual declared ecosystems. |
+| DX-002 | Establish Ruff baseline | Complete locally | S | DX-001 | 2 | Ruff 0.15.22 exits cleanly in the declared environment. |
+| GH-001 | Add CI | Ready for remote verification | M | DX-001, direct tests | 2 | Workflow runs documented checks on Python 3.9, 3.11, and 3.14 after push. |
+| GH-004 | Add Dependabot | Ready for remote verification | S | DX-001, GH-001 | 2 | Configuration covers pip and GitHub Actions after it reaches the default branch. |
 | DOC-002 | Refresh README and agent guidance | Complete locally | M | DOC-001, ARCH-001, test baseline | 2 | Public docs and `AGENTS.md` match the canonical lesson, historical variants, commands, and test scope; `CLAUDE.md` remains Claude-specific. |
 | DOC-003 | Retire stale coverage report | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material claims were assessed in `ANALYSIS.md`, then the stale static report was removed. Future evidence must be CI-generated. |
 | DOC-004 | Retire stale audit and code review | Complete | S | Review reconciliation | 0 | Completed 2026-07-17: material findings were reconciled into `ANALYSIS.md` and this roadmap, then both stale reports were removed. |

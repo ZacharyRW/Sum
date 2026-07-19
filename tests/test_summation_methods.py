@@ -1,13 +1,7 @@
 # file: tests/test_summing_methods.py
 import math
-import sys
-import pytest
 
-# Ensure the demo module is importable if tests run from repo root.
-# Why: keep tests robust to working directory differences.
-from pathlib import Path
-REPO_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(REPO_ROOT))
+import pytest
 
 from demos.summing_methods import (
     add_plus,
