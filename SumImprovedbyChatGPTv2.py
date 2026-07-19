@@ -1,6 +1,14 @@
-"""Historical pytest-style summation checks."""
+"""Historical pytest-style summation checks.
+
+This snapshot is retained for provenance only.  The active core tests live in
+``tests/test_summation_methods.py``; this root-level module is not collected
+by the repository's pytest configuration.
+"""
 import math
 import pytest
+
+# Prevent collection if this module is ever imported by a test collector.
+__test__ = False
 
 from demos.summing_methods import (  # type: ignore
     add_plus,

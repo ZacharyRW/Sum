@@ -2,7 +2,7 @@
 
 ## Purpose and scope
 
-Sum is an educational Python repository demonstrating summation techniques and preserving AI-assisted implementation iterations. Treat the variants as teaching artifacts unless a maintainer explicitly designates a canonical implementation.
+Sum is an educational Python summation tutorial that preserves AI-assisted implementation iterations as teaching artifacts. `demos/summing_methods.py` is the canonical reusable lesson; the root-level variants are historical, runnable examples unless their own documentation says otherwise.
 
 ## Authoritative sources
 
@@ -14,15 +14,16 @@ Sum is an educational Python repository demonstrating summation techniques and p
 ## Repository layout
 
 - `Sum.py`: original two-number CLI example.
-- `SumImprovedbyClaudeCode*.py`: historical Claude iterations.
-- `SumImprovedbyChatGPT*.py`: historical ChatGPT iterations; `SumImprovedbyChatGPT.py` currently duplicates `demos/summing_methods.py`.
-- `demos/summing_methods.py`: reusable summation functions and the strongest candidate for a future canonical core.
-- `tests/`: pytest suite.
+- `demos/summing_methods.py`: canonical reusable summation functions and interactive lesson.
+- `SumImprovedbyClaudeCode*.py`: historical, independently runnable Claude iterations.
+- `SumImprovedbyChatGPT.py`: historical ChatGPT entry point that delegates to the canonical lesson.
+- `SumImprovedbyChatGPTv2.py`: historical pytest snapshot; it is deliberately not collected.
+- `tests/`: pytest suite; `test_summation_methods.py` is the single active core arithmetic suite.
 
 ## Working conventions
 
 - Inspect current code, `ANALYSIS.md`, and `ROADMAP.md` before proposing or implementing work.
-- Preserve historical variants unless the request explicitly authorizes moving, deleting, or rewriting them.
+- Preserve historical variants unless the request explicitly authorizes moving, deleting, or rewriting them. Keep their provenance labels accurate when the canonical lesson changes.
 - Add focused regression tests for behavior changes. Do not claim coverage for a source function when a test exercises a local copy instead.
 - Keep documentation repository-relative and avoid volatile assertions about test counts, line counts, coverage percentages, or branch state unless freshly verified.
 - Use clear docstrings, type hints where they improve the lesson, PEP 8 formatting, and user-facing validation/error messages.
@@ -34,6 +35,6 @@ Sum is an educational Python repository demonstrating summation techniques and p
 
 ## Verification and Git
 
-- Run the repository’s declared checks when available; at present there is no declared dependency manifest or CI workflow.
+- Install the declared development tools with `python -m pip install -r requirements-dev.txt`, then run `python -m pytest tests/` and `ruff check .`. There is no CI workflow yet.
 - Before making Git claims, check `git branch --show-current`, `git rev-parse --short HEAD`, and `git status --short`.
 - Push only when explicitly requested. Confirm the branch and staged scope immediately before committing or pushing.

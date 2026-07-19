@@ -1,18 +1,20 @@
 # Sum
 
-An educational Python repository demonstrating various approaches to summing numbers, showcasing iterative improvement patterns across multiple implementations contributed by different AI assistants and developers.
+An educational Python summation tutorial. The maintained lesson is
+`demos/summing_methods.py`; the other scripts are runnable historical
+AI-assisted iterations retained for comparison and provenance.
 
 ## Files
 
 | File | Description |
 |---|---|
-| `Sum.py` | Original basic implementation |
-| `SumImprovedbyClaudeCode.py` | v1: Input validation and error handling |
-| `SumImprovedbyClaudeCodev2.py` | v2: Float support and multiple number summation |
-| `SumImprovedbyClaudeCodev3.py` | v3: Interactive menu system with analysis (most complete) |
-| `SumImprovedbyChatGPT.py` | Type-annotated implementation using `demos.summing_methods` |
-| `SumImprovedbyChatGPTv2.py` | Test-driven variant with pytest integration |
-| `demos/summing_methods.py` | Shared module with canonical summation implementations |
+| `demos/summing_methods.py` | Canonical reusable summation lesson and interactive demo |
+| `SumImprovedbyChatGPT.py` | Historical ChatGPT entry point that runs the canonical lesson |
+| `Sum.py` | Historical original two-number CLI example |
+| `SumImprovedbyClaudeCode.py` | Historical Claude v1 integer-input demonstration |
+| `SumImprovedbyClaudeCodev2.py` | Historical Claude v2 float and multiple-number demonstration |
+| `SumImprovedbyClaudeCodev3.py` | Historical Claude v3 menu and sign-analysis demonstration |
+| `SumImprovedbyChatGPTv2.py` | Historical pytest snapshot; not part of the active test suite |
 
 ## Summation Methods Demonstrated
 
@@ -34,14 +36,20 @@ An educational Python repository demonstrating various approaches to summing num
 
 ## Tests
 
-The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. Current test totals and coverage are not claimed until the project has a declared toolchain and CI-generated results.
+The repository includes a pytest suite covering core summation behavior, input validation, edge cases, and integration paths. `tests/test_summation_methods.py` is the single active core arithmetic suite; `SumImprovedbyChatGPTv2.py` is retained only as a historical test snapshot. The project requires Python 3.9 or later. Current test totals and coverage are not claimed until CI-generated results are available.
 
 ```bash
+# Install the declared development toolchain
+python -m pip install -r requirements-dev.txt
+
 # Run all tests
-pytest tests/
+python -m pytest tests/
 
 # Run with verbose output
-pytest tests/ -v
+python -m pytest tests/ -v
+
+# Run the configured linter
+ruff check .
 ```
 
 ## License

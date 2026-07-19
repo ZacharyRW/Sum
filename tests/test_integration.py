@@ -47,6 +47,13 @@ class TestModuleImports:
         except Exception as e:
             pytest.fail(f"Failed to import Sum.py: {e}")
 
+    def test_chatgpt_entry_point_delegates_to_canonical_demo(self):
+        """The historical ChatGPT entry point must not fork core behavior."""
+        import SumImprovedbyChatGPT
+        from demos.summing_methods import main
+
+        assert SumImprovedbyChatGPT.main is main
+
     def test_function_availability(self):
         """Test that all expected functions are available."""
         from demos.summing_methods import (

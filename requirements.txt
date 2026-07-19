@@ -1,2 +1,0 @@
-# Test runner for the repository's pytest suite.
-pytest
