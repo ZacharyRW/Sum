@@ -1,4 +1,5 @@
-# file: demos/summing_methods.py
+"""Canonical reusable lesson demonstrating several Python summation methods."""
+
 from __future__ import annotations
 
 import math

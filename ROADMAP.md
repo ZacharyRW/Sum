@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Source of truth:** Verified findings in [ANALYSIS.md](ANALYSIS.md), audited 2026-07-14.
+**Source of truth:** Verified findings in [ANALYSIS.md](ANALYSIS.md), reconciled 2026-07-18.
 
 **Planning boundary:** This roadmap does not authorize a broad refactor, branch deletion, history rewrite, release, issue closure, or GitHub settings change. A 2026-07-17 `git fetch --prune origin` confirmed that local `master` is fully merged into `origin/main` (0 unique commits; 9 commits behind), so future implementation should start from fresh `main`.
 
@@ -40,7 +40,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 - **BUG-005 — Completed locally 2026-07-18: handle EOF cleanly.** Interactive input helpers return from the current demo with a user-facing message when standard input closes.
 - **UX-001 — Completed locally 2026-07-18: define the numeric contract.** Float prompts accept finite values only; `nan`, `inf`, and `-inf` are rejected and the rule is documented and tested.
 - **TEST-005 — Completed locally 2026-07-18: define a count limit.** Count-based Claude v2/v3 demos reject counts outside 1–100 before prompting for values.
-- **BUG-002 — Completed locally 2026-07-18: remove fragile path manipulation.** The root pytest-style historical module no longer mutates `sys.path`.
+- **BUG-002 — Completed locally 2026-07-18: remove fragile path manipulation.** The historical pytest snapshot no longer mutates `sys.path`.
 - **BUG-003 — Completed locally 2026-07-18: remove redundant integer casts.** Count input returns an `int` in integer mode and callers pass it directly.
 
 ### Direct evidence tests
@@ -65,7 +65,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 ### Test and tooling hygiene
 
-- **TEST-001 — Completed locally 2026-07-18: consolidate duplicate core tests.** Removed the collected duplicate module; `tests/test_summation_methods.py` is the single active core arithmetic suite, while the root-level ChatGPT v2 snapshot remains explicitly non-collected.
+- **TEST-001 — Completed locally 2026-07-18: consolidate duplicate core tests.** Removed the collected duplicate module; `tests/test_summation_methods.py` is the single active core arithmetic suite, while `history/chatgpt_v2_test_snapshot.py` remains explicitly non-collected.
 - **TEST-004 — Completed locally 2026-07-18: remove unused fixtures and markers.** Deleted the unconsumed fixture catalogue and marker registrations; active tests use only direct parametrization and fixtures local to their test modules.
 - **DX-001 — Completed locally 2026-07-18: declare the development environment.** `pyproject.toml` declares Python 3.9+ and test/lint configuration; `requirements-dev.txt` declares pytest, pytest-cov, and Ruff; README documents the install and check commands.
 - **DX-002 — Completed locally 2026-07-18: establish a current lint baseline.** Ruff 0.15.22 runs cleanly from the declared environment after removing path mutations and unused imports; do not rely on the old “10 findings” count.
@@ -84,7 +84,7 @@ Each implementation change should begin from a fresh, clean `main` worktree, use
 
 These are optional user-facing improvements that fit the existing educational identity. Start only after Phases 0–2 exit criteria are met.
 
-- **FEAT-003 — Extract and present number statistics.** Provide a pure function for count, positive/negative/zero groups, and totals; keep menu presentation thin. Value: demonstrates separation of concerns and enables direct tests. Complexity: small once ARCH-001 is complete.
+- **FEAT-003 — Extend and present number statistics.** Build on the existing pure `history.claude_v3_menu_demo.analyze_numbers()` helper with any selected statistics; keep menu presentation thin. Value: demonstrates separation of concerns and enables direct tests. Complexity: small once selected.
 - **FEAT-001a — Add documented command-line arguments.** Support a simple one-shot sum without interactive prompts. Value: makes examples scriptable. Complexity: small-to-medium; depends on UX-001, BUG-005, DX-001, and canonical CLI ownership.
 - **FEAT-001b — Consider strict file input.** Only after arguments are stable. Define format, maximum size, encoding, errors, and finite-number policy. Complexity: medium; changes the security/resource model and needs renewed security review.
 - **FEAT-002 — Create a tutorial notebook or narrative lesson.** Value: makes the evolutionary educational story legible. Complexity: medium; depends on ARCH-002 and accurate docs.
@@ -184,7 +184,7 @@ None. `origin/master` was pruned as a stale local tracking ref on 2026-07-17; th
 | UX-001 | Define finite-number and count policy | Complete locally | S | Product behavior decision | 1 | Float input rejects NaN/Inf and count-based prompts accept 1–100; both are documented and tested. |
 | TEST-002 | Direct Claude input tests | Complete locally | M | Testable input seam | 1 | Each variant has real mocked-input retry, numeric-contract, and EOF tests. |
 | TEST-003 | Replace local-copy tests | Complete locally | M | ARCH-001 | 1 | Tests import and exercise extracted source helpers. |
-| BUG-002 | Remove path hack | Complete locally | S | DX-001 or package decision | 1 | Root historical test module no longer uses `sys.path.append(".")`. |
+| BUG-002 | Remove path hack | Complete locally | S | DX-001 or package decision | 1 | The historical test snapshot no longer uses `sys.path.append(".")`. |
 | BUG-003 | Remove redundant casts | Complete locally | S | Tests/type contract | 1 | No redundant count casts remain. |
 | ARCH-002 | Choose project identity | Complete locally | S | Maintainer decision | 2 | Sum is a concise Python summation tutorial with historical AI-assisted variants. |
 | ARCH-001 | Establish canonical variant | Complete locally | M | ARCH-002 | 2 | `demos/summing_methods.py` is canonical; `history/` preserves renamed historical examples and the ChatGPT entry point delegates to it. |

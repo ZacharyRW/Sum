@@ -216,8 +216,9 @@ class TestDocstringsAndMetadata:
     def test_module_has_docstring(self):
         """Test that the module has a docstring."""
         import demos.summing_methods
-        # Module may or may not have a docstring, but it should be importable
-        assert demos.summing_methods.__name__ == 'demos.summing_methods'
+
+        assert demos.summing_methods.__doc__ is not None
+        assert demos.summing_methods.__doc__.strip()
 
 
 class TestRealWorldScenarios:

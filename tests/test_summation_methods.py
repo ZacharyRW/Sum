@@ -1,4 +1,5 @@
-# file: tests/test_summing_methods.py
+"""Core arithmetic tests for the canonical summation lesson."""
+
 import math
 
 import pytest
