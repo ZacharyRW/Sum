@@ -47,13 +47,13 @@ python3 -m venv .venv
 | --- | --- | --- |
 | #15 GH-001: CI | Former matrix was verified green; the new 3.10/3.11/3.14 matrix needs a post-push run. | Verify a green `main` run, then close the issue. |
 | #25 FEAT-003: statistics | Optional historical-v3 enhancement. | Select only if changing a comparison artifact has clear teaching value. |
-| #26 GH-002: public metadata | GPL-3.0 metadata is correct; topics are unset; Wiki and Projects are enabled; Discussions is disabled. | Make owner decisions and record the chosen settings. |
+| #26 GH-002: public metadata | Description and five focused topics are configured; Wiki, Projects, and Discussions are disabled. | Close with the recorded settings. |
 | #27 FEAT-001: CLI/file input | Canonical `--numbers` CLI mode is implemented locally; file input remains out of scope pending a separate security review. | Verify the new CLI on remote CI, then update/close the issue. |
 | #28 FEAT-002: tutorial notebook | Optional. | Require a defined reader, maintained imports, and reproducible execution. |
 | #29 GH-003: protection/release | CI is proven only for the former matrix; `main` is unprotected. | Configure protection after a green 3.10+ run and decide release policy separately. |
 | #44 SEC-001: security-scope closure | Current and accurate. | Close as a current-state result while retaining explicit reassessment triggers. |
 
-Dependabot has five open PRs. The pytest 9 update formerly failed only because pytest 9 requires Python 3.10; the local compatibility change now duplicates that proposal, so close it as superseded once the migration reaches `main`. The other green dependency PRs still require ordinary release-note review before merge.
+Dependabot PRs #48 (checkout), #50 (setuptools), and #51 (pytest-cov) were reviewed and merged on 2026-07-19. The pytest 9 proposal (#49) is superseded by the compatibility migration, and the Ruff proposal (#52) is superseded by the final reconciliation commit after becoming unmergeable against the updated requirement file.
 
 ## Historical findings
 

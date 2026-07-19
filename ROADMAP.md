@@ -23,9 +23,10 @@ No open issue represents a verified local application defect. The remaining work
 
 ### Dependency follow-through
 
-- Re-evaluate Dependabot PR #49 (pytest 9) after COMPAT-001; it formerly failed only because Python 3.9 cannot install pytest 9.
-- Review #48, #50, #51, and #52 independently; green CI does not replace release-note and scope review.
-- Merge no dependency update automatically unless repository policy later explicitly allows it.
+- Completed: reviewed and merged Dependabot PRs #48 (checkout), #50 (setuptools), and #51 (pytest-cov).
+- Close #49 (pytest 9) as superseded by COMPAT-001.
+- Apply the reviewed Ruff floor from #52 directly in the reconciliation commit, then close #52 as superseded because its branch no longer merges cleanly.
+- Keep automatic dependency merging disabled unless repository policy later explicitly authorizes it.
 
 ## Phase 2: Close verified automation work
 
@@ -48,10 +49,7 @@ After #15 closes:
 
 ### #26 GH-002 — Review public presentation
 
-1. Align the description with the educational tutorial and historical-comparison identity.
-2. Add only useful topics, such as `python`, `education`, `tutorial`, `summation`, and optionally `ai-assisted-development`.
-3. Retain Wiki, Projects, or Discussions only if each has an explicit maintenance purpose.
-4. Record settings selected; add a social image only if it materially improves discovery.
+Completed 2026-07-19: the description identifies the educational tutorial and historical-comparison identity; topics are `python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`; Wiki, Projects, and Discussions are disabled. Close #26 with this record. A social image remains unnecessary unless it materially improves discovery.
 
 ## Phase 4: Close the current security-scope item
 
