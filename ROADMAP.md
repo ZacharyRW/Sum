@@ -5,7 +5,7 @@
 
 ## Current state
 
-The canonical lesson and historical artifacts are established, local correctness work is complete, and the supported matrix is **Python 3.10/3.11/3.14**. The compatibility migration, CLI improvement, and dependency reconciliation are verified by [CI run 29676990969](https://github.com/ZacharyRW/Sum/actions/runs/29676990969).
+The canonical lesson and historical artifacts are established, local correctness work is complete, and the supported matrix is **Python 3.10/3.11/3.14**. The compatibility migration, CLI improvement, and dependency reconciliation are verified by [CI run 29676990969](https://github.com/ZacharyRW/summation-tutorial/actions/runs/29676990969).
 
 No open issue represents a verified local application defect. The remaining work is grouped below so administration, maintenance, and optional features do not blur together.
 
@@ -27,7 +27,7 @@ Completed 2026-07-19: `requires-python` is `>=3.10`; pytest is constrained to 9.
 
 ### #15 GH-001 — Verify CI workflow
 
-Completed 2026-07-19: [#15](https://github.com/ZacharyRW/Sum/issues/15) is closed with the green 3.10/3.11/3.14 run.
+Completed 2026-07-19: [#15](https://github.com/ZacharyRW/summation-tutorial/issues/15) is closed with the green 3.10/3.11/3.14 run.
 
 **Success criteria:** the issue records the actual commands and matrix, rather than a historical claim that CI is missing.
 
@@ -37,13 +37,13 @@ Completed 2026-07-19: `main` requires the Python 3.10, 3.11, and 3.14 checks; ad
 
 ### #26 GH-002 — Review public presentation
 
-Completed 2026-07-19: [#26](https://github.com/ZacharyRW/Sum/issues/26) is closed; the description identifies the educational tutorial and historical-comparison identity; topics are `python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`; Wiki, Projects, and Discussions are disabled. A social image remains unnecessary unless it materially improves discovery.
+Completed 2026-07-19: [#26](https://github.com/ZacharyRW/summation-tutorial/issues/26) is closed; the description identifies the educational tutorial and historical-comparison identity; topics are `python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`; Wiki, Projects, and Discussions are disabled. A social image remains unnecessary unless it materially improves discovery.
 
 ## Completed: security-scope record
 
 ### #44 SEC-001 — Preserve local CLI security closure
 
-Completed 2026-07-19: [#44](https://github.com/ZacharyRW/Sum/issues/44) is closed as a current-state result. Reopen security review before file input, network access, web/plugin integration, persistence, hosted execution, or authentication.
+Completed 2026-07-19: [#44](https://github.com/ZacharyRW/summation-tutorial/issues/44) is closed as a current-state result. Reopen security review before file input, network access, web/plugin integration, persistence, hosted execution, or authentication.
 
 ## Phase 5: Optional product work
 

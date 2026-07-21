@@ -1,8 +1,8 @@
-# Sum Repository Agent Guide
+# Summation Tutorial Repository Agent Guide
 
 ## Purpose and scope
 
-Sum is an educational Python summation tutorial that preserves AI-assisted implementation iterations as teaching artifacts. `demos/summing_methods.py` is the canonical reusable lesson; historical runnable examples live in `history/`.
+Summation Tutorial is an educational Python summation tutorial that preserves AI-assisted implementation iterations as teaching artifacts. `demos/summing_methods.py` is the canonical reusable lesson; historical runnable examples live in `history/`.
 
 ## Authoritative sources
 

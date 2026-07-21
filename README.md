@@ -1,4 +1,4 @@
-# Sum
+# Summation Tutorial
 
 An educational Python summation tutorial. The maintained lesson is
 `demos/summing_methods.py`; the [`history/`](history/) package contains
