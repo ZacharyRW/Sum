@@ -6,7 +6,7 @@
 
 ## Summary
 
-Sum is an educational Python summation tutorial. `demos/summing_methods.py` is the maintained reusable lesson; `history/` preserves runnable original and AI-assisted examples as comparison and provenance artifacts.
+Summation Tutorial is an educational Python summation tutorial. `demos/summing_methods.py` is the maintained reusable lesson; `history/` preserves runnable original and AI-assisted examples as comparison and provenance artifacts.
 
 The historical correctness, input-contract, duplicate-test, licensing, tooling, and canonical-implementation findings are resolved. The maintained project baseline is **Python 3.10+**. Python 3.9 is absent from the package contract and CI matrix, and the declared pytest 9 development dependency is supported by a green remote run.
 
@@ -27,7 +27,7 @@ No verified local application defect remains. The canonical one-shot CLI is impl
 
 | Check | Status | Evidence |
 | --- | --- | --- |
-| Current default branch CI | Passed | [CI run 29676990969](https://github.com/ZacharyRW/Sum/actions/runs/29676990969) passed pytest and Ruff on Python 3.10, 3.11, and 3.14 at `15b7df5`. |
+| Current default branch CI | Passed | [CI run 29676990969](https://github.com/ZacharyRW/summation-tutorial/actions/runs/29676990969) passed pytest and Ruff on Python 3.10, 3.11, and 3.14 at `15b7df5`. |
 | Python baseline | Verified | `requires-python` is `>=3.10`; CI targets 3.10/3.11/3.14; pytest is constrained to 9.x. |
 | Security scope | No reportable finding | Current runtime has no network, file, persistence, authentication, or external-service path. |
 | Branch protection | Configured | `main` requires the Python 3.10/3.11/3.14 checks; admin enforcement is enabled; force pushes and deletions are disabled. |
