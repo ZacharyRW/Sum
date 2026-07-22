@@ -72,6 +72,27 @@ python -m demos.summing_methods --float --numbers 1.5 2.25
 floating-point values; `nan`, `inf`, and `-inf` are rejected. File input is not
 part of the current CLI contract.
 
+## Historical progression notebook
+
+[`notebooks/historical_progression.ipynb`](notebooks/historical_progression.ipynb)
+is an optional, executable walkthrough from the original two-number example
+through the historical Claude variants to the maintained canonical lesson. It
+links to the current paths and the former-name mapping in
+[`history/README.md`](history/README.md); historical modules are comparison
+artifacts, not alternatives to `demos/summing_methods.py`.
+
+To execute it from a clean checkout, install the tutorial's development tools
+and its optional notebook dependency, then run it from the repository root:
+
+```bash
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements-dev.txt
+./.venv/bin/python -m pip install -r requirements-notebook.txt
+./.venv/bin/python -m jupyter nbconvert --to notebook --execute \
+  --output historical_progression.executed.ipynb --output-dir /tmp \
+  notebooks/historical_progression.ipynb
+```
+
 ## License
 
 This project is licensed under the [GNU General Public License v3.0](LICENSE).

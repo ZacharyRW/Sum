@@ -45,15 +45,29 @@ Completed 2026-07-19: [#26](https://github.com/ZacharyRW/summation-tutorial/issu
 
 Completed 2026-07-19: [#44](https://github.com/ZacharyRW/summation-tutorial/issues/44) is closed as a current-state result. Reopen security review before file input, network access, web/plugin integration, persistence, hosted execution, or authentication.
 
-## Phase 5: Optional product work
+## Completed optional product work
 
-Select at most one initiative after Phases 1–4.
+### #25 FEAT-003 — Historical v3 statistics
 
-| Issue | Initiative | Implementation boundary | Success criteria |
-| --- | --- | --- | --- |
-| #27 FEAT-001 | CLI arguments | Completed and closed: one-shot `--numbers` input in `demos/summing_methods.py` preserves no-argument interactive behavior. File input remains a separately approved feature. | Reassess only if file input is explicitly selected. |
-| #25 FEAT-003 | Historical v3 statistics | Extend only `history.claude_v3_menu_demo.analyze_numbers()` after defining empty-input, type, and precision behavior. | Direct helper tests and thin menu presentation; provenance remains clear. |
-| #28 FEAT-002 | Tutorial notebook | Import maintained code rather than copy it; clearly distinguish canonical and historical material. | Renders on GitHub and executes from a clean, documented environment. |
+Implemented locally 2026-07-21; the GitHub issue remains open pending review.
+`history.claude_v3_menu_demo.analyze_numbers()` now returns mean, median,
+minimum, and maximum alongside its existing sign breakdown. Its numeric contract
+covers finite built-in `int` and `float` inputs, empty inputs, standard Python
+arithmetic, and validation errors. Focused helper and menu-output tests cover
+ordinary, empty, and invalid input.
+
+### #28 FEAT-002 — Tutorial notebook
+
+Implemented locally 2026-07-21; the GitHub issue remains open pending review.
+`notebooks/historical_progression.ipynb` explains the progression using current
+paths and `history/README.md`, imports the canonical lesson rather than copying
+it, and distinguishes maintained code from historical comparison artifacts.
+`requirements-notebook.txt` declares the execution tools; the notebook executes
+from a clean environment with the documented command.
+
+| Issue | Initiative | Current status |
+| --- | --- | --- |
+| #27 FEAT-001 | CLI arguments | Completed and closed; reassess only if file input is explicitly selected. |
 
 For any file-input proposal, first define encoding, format, size/count limits, finite-number policy, error handling, and a scoped security review.
 

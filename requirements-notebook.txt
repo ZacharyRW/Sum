@@ -1,0 +1,3 @@
+# Optional dependencies for executing notebooks/historical_progression.ipynb.
+ipykernel>=6,<8
+nbconvert>=7,<8
