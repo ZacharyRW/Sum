@@ -56,13 +56,50 @@ def custom_sum(numbers: Iterable[Number]) -> Number:
 
 
 def analyze_numbers(numbers: Iterable[Number]) -> dict[str, object]:
-    """Return the total and a sign-based breakdown for ``numbers``."""
+    """Return sign and summary statistics for finite numeric values.
+
+    Values must be built-in ``int`` values or finite ``float`` values. The input
+    is materialized once, so generators are supported and the returned
+    sign-based lists preserve the original values and order. ``total`` and the
+    sign-specific sums use Python's built-in ``sum`` and consequently retain
+    normal Python ``int``/``float`` arithmetic rather than adding a
+    high-precision policy to this historical demonstration.
+
+    For non-empty input, ``mean`` is ``total / count``, ``median`` is the
+    middle sorted value (or the arithmetic mean of the two middle values), and
+    ``minimum`` and ``maximum`` are input values. For empty input, all four
+    summary statistics are ``None``. Non-numeric values raise ``TypeError``;
+    non-finite floats raise ``ValueError``.
+    """
     values = list(numbers)
+    for number in values:
+        if isinstance(number, bool) or not isinstance(number, (int, float)):
+            raise TypeError("numbers must contain int or float values")
+        if isinstance(number, float) and not math.isfinite(number):
+            raise ValueError("numbers must contain only finite float values")
+
     positive_numbers = [number for number in values if number > 0]
     negative_numbers = [number for number in values if number < 0]
     zero_numbers = [number for number in values if number == 0]
+    total = sum(values)
+
+    if values:
+        sorted_values = sorted(values)
+        middle_index = len(sorted_values) // 2
+        if len(sorted_values) % 2:
+            median: Optional[Number] = sorted_values[middle_index]
+        else:
+            lower_middle = sorted_values[middle_index - 1]
+            upper_middle = sorted_values[middle_index]
+            median = (lower_middle + upper_middle) / 2
+        mean: Optional[Number] = total / len(values)
+        minimum: Optional[Number] = sorted_values[0]
+        maximum: Optional[Number] = sorted_values[-1]
+    else:
+        mean = median = minimum = maximum = None
+
     return {
-        "total": sum(values),
+        "total": total,
         "positive": positive_numbers,
         "negative": negative_numbers,
         "zeros": zero_numbers,
@@ -71,6 +108,10 @@ def analyze_numbers(numbers: Iterable[Number]) -> dict[str, object]:
         "positive_count": len(positive_numbers),
         "negative_count": len(negative_numbers),
         "zero_count": len(zero_numbers),
+        "mean": mean,
+        "median": median,
+        "minimum": minimum,
+        "maximum": maximum,
     }
 
 
@@ -146,6 +187,11 @@ def method_positive_negative_demo() -> None:
     print(f"  Negative numbers: {analysis['negative']} (sum: {analysis['negative_sum']})")
     if analysis["zero_count"]:
         print(f"  Zeros: {analysis['zero_count']}")
+    print("\nSummary statistics:")
+    print(f"  Mean: {analysis['mean']}")
+    print(f"  Median: {analysis['median']}")
+    print(f"  Minimum: {analysis['minimum']}")
+    print(f"  Maximum: {analysis['maximum']}")
 
 
 def display_menu() -> None:
