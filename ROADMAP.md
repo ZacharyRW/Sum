@@ -1,6 +1,6 @@
 # Project Roadmap
 
-**Derived from:** `ANALYSIS.md` audited 2026-07-21 at `009058c`.
+**Derived from:** `ANALYSIS.md` audited 2026-07-22; live GitHub `main` was `009058c` and local `main` was `0386973` (one commit ahead of `origin/main`).
 **Principle:** prioritize verified user-contract failures and release-confidence gaps before optional features; preserve historical artifacts unless a change explicitly selects them.
 
 ## Roadmap Principles
@@ -9,13 +9,14 @@ Order work by learner impact, risk reduction, evidence strength, effort, depende
 
 ## Phase 0: Immediate Safety and Repository Hygiene
 
-No critical security issue, broken test suite, unsafe branch, or default-branch migration is required. Keep `main` as default and do not delete branches: the only current branch is synchronized `main`.
+No critical security issue, broken test suite, unsafe branch, or default-branch migration is required. Keep protected `main` as default and do not delete branches: it is the only remote branch. Local `main` is one reviewed documentation commit ahead of `origin/main`; do not push it without explicit approval.
 
 ## Phase 1: Stabilization
 
 - **TEST-001:** Correct integer-mode test expectations to assert both values and `int` types; preserve the exact-large-integer case.
 - **DOC-002:** State the current package-build decision in README/developer guidance: either supported distribution or tutorial-only tooling metadata.
 - **NB-001:** Execute `notebooks/historical_progression.ipynb` on a normal host/CI runner and record a reproducible result.
+- **GH-005:** Decide whether to enable GitHub secret scanning and push protection. No secret exposure was found, but the live repository reports both controls disabled.
 
 ## Phase 2: Maintainability and Developer Experience
 
@@ -54,7 +55,9 @@ No expansion is committed. Hosted lessons, file input, network integrations, pub
 
 ## GitHub Improvement Plan
 
-Manual GitHub review is required because authentication was unavailable: verify description/topics/social preview, open Issues and PRs (including whether completed notebook/statistics issues remain open), branch protection and required checks, Actions status, releases/tags, templates, and Dependabot alerts. Keep workflow permissions minimal. After `PKG-001`/`DX-001`, add only validated checks to the required-check policy.
+The live GitHub review is complete: the public description, topics, README presentation, default branch, protections, Actions, Dependabot configuration, Issues, PRs, releases/tags, and repository features were verified. Keep the current description/topics and branch-protection rule; latest `main` CI is green and no Issues or PRs are open. Do not create releases, packages, a homepage, or showcase media unless a distribution goal is selected.
+
+`GH-005` is a preventive decision: enable secret scanning and push protection if the maintainer wants GitHub to enforce that guardrail. This requires an explicit GitHub-setting change and is not evidence of a current secret leak. If external contributions become an active goal, create focused issue forms/templates, a PR template, and a concise `CONTRIBUTING.md`; otherwise the 42% community-profile score is informational rather than a backlog defect. After `PKG-001`/`DX-001`, add only validated checks to the required-check policy. The social-preview asset remains a manual visual setting to review if public showcasing becomes important.
 
 ## Branch Cleanup Plan
 
@@ -62,9 +65,9 @@ Manual GitHub review is required because authentication was unavailable: verify 
 | --- | --- |
 | Safe to delete now | None. |
 | Review before deletion | None visible locally. |
-| Keep | `main`, synchronized with `origin/main`. |
+| Keep | The only remote branch, protected `main`; local `main` is one reviewed commit ahead of `origin/main`. |
 | Rename or migrate | None; default branch is already `main`. |
-| Manual GitHub action required | Verify remote default/branch protection because local refs cannot prove settings. |
+| Manual GitHub action required | None for branch hygiene. Push the local documentation commit only when it has been reviewed and explicitly approved. |
 
 ## Milestones
 
@@ -72,6 +75,7 @@ Manual GitHub review is required because authentication was unavailable: verify 
 | --- | --- | --- | --- | --- | --- | --- |
 | TEST-001 | Assert exact integer type contract | High | S | None | 1 | Integer parser tests fail if values become floats. |
 | NB-001 | Verify notebook on socket-capable host | Medium | S | Normal host/CI | 1 | Documented nbconvert command exits 0. |
+| GH-005 | Decide GitHub secret-scanning and push-protection posture | Medium | XS | Maintainer setting decision | 1 | The selected GitHub controls are deliberately enabled or their absence is documented. |
 | PKG-001 | Decide and validate package build | High | S-M | Maintainer decision | 2 | Wheel/sdist build is either green in CI or intentionally unsupported. |
 | DX-001 | Establish formatting policy | Medium | S | Maintainer decision | 2 | `ruff format --check` is green for selected scope. |
 | CI-001 | Align CI with supported validation | Medium | S | PKG-001/DX-001/NB-001 | 2 | Required checks match documented support. |
@@ -91,5 +95,5 @@ Manual GitHub review is required because authentication was unavailable: verify 
 2. Decide whether the project is a distributable package; execute PKG-001 accordingly.
 3. Run the notebook command outside this sandbox and choose its CI policy.
 4. Decide formatting treatment for historical files, then implement DX-001/CI-001.
-5. Re-authenticate GitHub CLI and perform the manual settings/issue review.
+5. Decide `GH-005`; make no GitHub-setting change without explicit approval.
 6. Select at most one Phase 3 improvement.

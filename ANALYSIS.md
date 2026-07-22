@@ -1,8 +1,8 @@
 # Project Analysis
 
-**Audited:** 2026-07-21 (America/Denver)
-**Revision:** `main` at `009058c96efbec950c98b125515c32af4c53153f`
-**Scope:** tracked working tree, local Git metadata/history, declared validation, and publicly accessible GitHub checks.
+**Audited:** 2026-07-22 (America/Denver)
+**Revision:** local `main` at `0386973b23218d24eacf0647fb864bd758b2903f`; live GitHub `main` at `009058c96efbec950c98b125515c32af4c53153f` during the GitHub review.
+**Scope:** tracked working tree, local Git metadata/history, declared validation, and live GitHub API/public-page checks.
 
 ## Executive Summary
 
@@ -57,8 +57,8 @@ CI matches the first two local checks only: it installs `requirements-dev.txt`, 
 | --- | --- | --- | --- | --- | --- |
 | Python 3.10+ baseline | Prior analysis/roadmap, `pyproject.toml`, CI | Confirmed | Metadata and Ruff target are `py310`; CI matrix declares 3.10/3.11/3.14. | Yes | Maintain. |
 | Canonical one-shot CLI | Prior roadmap | Confirmed / completed | `--numbers` is implemented and smoke-tested. | No backlog item | Keep contract stable. |
-| Historical v3 statistics | Prior roadmap | Confirmed / completed | Implemented in `history/claude_v3_menu_demo.py`, covered by direct tests. | No backlog item | Close any matching GitHub issue after maintainer review. |
-| Historical notebook | Prior roadmap | Partially confirmed | Notebook and dependencies exist; execution is blocked only by this sandbox's socket restriction. | Yes | Verify in normal CI/host before declaring executable support complete. |
+| Historical v3 statistics | Prior roadmap, GitHub issue #25 | Confirmed / completed | Implemented in `history/claude_v3_menu_demo.py`, covered by direct tests; issue #25 was closed with merged PR #56. | No backlog item | Keep the historical-provenance boundary. |
+| Historical notebook | Prior roadmap, GitHub issue #28 | Confirmed / completed | Notebook and dependencies exist; issue #28 was closed with merged PR #56. Execution is blocked only by this sandbox's socket restriction. | No backlog item | Verify on a normal host/CI before claiming a portable execution result. |
 | Security-scope closure | Prior analysis | Confirmed | Repository-wide source review found only local numeric parsing and terminal output; no file/network/eval/subprocess/secret path. | Yes, conditionally | Reassess before file, network, persistence, hosted, auth, or plugin work. |
 | “No verified local defect” | Prior analysis | Partially confirmed | No runtime bug found; package-build and test-contract gaps remain. | No, wording too broad | Replace with this qualified assessment. |
 
@@ -120,13 +120,17 @@ Performance is not a concern at this scale. The only potentially unbounded maint
 
 ## GitHub and Branch Assessment
 
-Local Git establishes `origin/main` as the default remote branch; `main` and `origin/main` are identical at `009058c`; there are no local tags, other local branches, remote feature branches, or unmerged commits. Historical `master` exists only in old commit ancestry, not as a current ref.
+Live GitHub review on 2026-07-22 confirmed that [`ZacharyRW/summation-tutorial`](https://github.com/ZacharyRW/summation-tutorial) is a public, active, non-archived Python repository. Its concise description and five topics (`python`, `education`, `tutorial`, `summation`, and `ai-assisted-development`) accurately describe the project, and the rendered README clearly distinguishes the maintained lesson from historical artifacts. There is no homepage URL, social-preview asset was not verifiable through the public page/API, and the repository has no releases, packages, Wiki, Discussions, or Projects. Those omissions fit the current local-tutorial scope; create a homepage, release process, or showcase media only after selecting a distribution goal.
+
+GitHub's community profile reports 42% health because `CONTRIBUTING.md`, a code of conduct, issue forms/templates, and a pull-request template are absent. This is not a current operational defect: Issues are enabled but there are **zero open Issues**, **zero open PRs**, and no milestones. The completed notebook and historical-statistics work is reconciled: issues #25 and #28 closed when PR #56 merged. Recent external contribution PRs are closed rather than left abandoned.
+
+The Actions view shows active CI, Dependabot Updates, and Dependency Graph workflows. The latest `main` CI run for `009058c` completed successfully on 2026-07-22. Dependabot security updates are enabled, and the checked-in configuration covers pip and GitHub Actions. `main` is protected with strict required checks for Python 3.10, 3.11, and 3.14; the protection applies to administrators and forbids force-pushes and branch deletion. No rulesets are configured, which is acceptable because the classic branch-protection rule supplies the required safeguards. The repository API reports that secret scanning and push protection are disabled. No secret was found in the source audit, so this is a preventive GitHub-hygiene opportunity rather than a confirmed exposure.
+
+Live branch inspection found one remote branch, `main`, at `009058c`; it is the protected default branch, and there are zero tags. The local checkout is at `0386973`, one committed documentation update ahead of `origin/main`; that local state must be reviewed and explicitly pushed before GitHub can reflect it. Historical `master` exists only in old commit ancestry and merged-PR history, not as a current branch.
 
 | Branch | Last activity | Merge status | Associated PR | Unique commits | Recommended action | Reason |
 | --- | --- | --- | --- | --- | --- | --- |
-| `main` / `origin/main` | 2026-07-21 | Default/current | N/A | 0 vs origin | Keep | Clean, synchronized authoritative branch. |
-
-GitHub CLI authentication is invalid, and public GitHub page/actions/issues/pulls could not be fetched by the available web client. Therefore repository settings, current Issues/PRs, rulesets, social preview, releases, Wiki/Discussions/Projects, and branch protection were **not re-verified** in this audit. The checked-in workflow does use minimal `contents: read` permission and Dependabot covers pip and Actions.
+| `main` / `origin/main` | 2026-07-22 | Protected default/current | None open | Local `main` is 1 commit ahead of `origin/main` | Keep; push only after review | The sole active branch is healthy; the local documentation commit has not yet reached GitHub. |
 
 ## Product Opportunities and Recommended Priorities
 
@@ -134,4 +138,4 @@ Near term: TEST-001, PKG-001, then DX-001. Product ideas that fit: a short expla
 
 ## Limitations
 
-This audit did not authenticate to GitHub, inspect protected settings, install a missing build frontend/backend, run a build in isolated networked mode, run a type checker (none is configured), or execute the notebook because the sandbox prohibits local kernel socket binding. No destructive cleanup or branch deletion was performed.
+This audit authenticated to GitHub and inspected live metadata, public presentation, Issues, PRs, workflows, releases/tags, branch protection, and repository settings. It did not verify an uploaded social-preview image because GitHub does not expose that asset through the reviewed public/API surfaces. It also did not install a missing build frontend/backend, run a build in isolated networked mode, run a type checker (none is configured), or execute the notebook because the sandbox prohibits local kernel socket binding. No destructive cleanup, branch deletion, or GitHub-setting change was performed.
